@@ -216,9 +216,6 @@ All settings via environment variables (`.env`). Key options:
 - **Container orchestration** — Docker Compose for multi-service development environments
 - **Test-driven development** — 122 tests covering the full stack gives confidence to refactor
 
-## License
-
-MIT
 
 ---
 
