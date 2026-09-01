@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DocuMindRAG Documentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            color: #0F172A;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+        
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 25mm 30mm;
+            margin: 0 auto;
+        }
+        
+        /* Cover Page */
+        .cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 297mm;
+            text-align: center;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: white;
+            padding: 40mm 30mm;
+        }
+        
+        .cover-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0891B2, #06B6D4);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        .cover h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .cover .subtitle {
+            font-size: 1.1rem;
+            color: #94A3B8;
+            margin-bottom: 40px;
+        }
+        
+        .cover .meta {
+            font-size: 0.9rem;
+            color: #64748B;
+        }
+        
+        /* Content Pages */
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0891B2;
+            margin: 24px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #E2E8F0;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0F172A;
+            margin: 16px 0 8px;
+        }
+        
+        h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 12px 0 6px;
+        }
+        
+        p {
+            margin-bottom: 10px;
+            color: #334155;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 24px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+            color: #475569;
+        }
+        
+        code {
+            background: #F1F5F9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: #0891B2;
+        }
+        
+        pre {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        th {
+            background: #F8FAFC;
+            font-weight: 600;
+            color: #0F172A;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        td {
+            color: #475569;
+            font-size: 0.9em;
+        }
+        
+        .callout {
+            background: #ECFEFF;
+            border-left: 4px solid #0891B2;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .callout strong {
+            color: #0891B2;
+        }
+        
+        .architecture-box {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            font-family: monospace;
+            font-size: 0.8em;
+            line-height: 1.4;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #0891B2;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #94A3B8;
+            font-size: 0.8em;
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover">
+    <div class="cover-logo">DM</div>
+    <h1>DocuMindRAG</h1>
+    <p class="subtitle">PDF Q&A with Real Page Citations</p>
+    <p class="meta">Technical Documentation & Architecture Guide</p>
+    <p class="meta" style="margin-top: 20px;">Version 0.1.0 | August 2026</p>
+</div>
+
+<!-- Page 2: Overview -->
+<div class="page page-break">
+    <h2>1. Overview</h2>
+    
+    <p><strong>DocuMindRAG</strong> is a Retrieval-Augmented Generation (RAG) application that allows users to upload PDF documents and ask natural language questions, receiving accurate answers with exact page citations.</p>
+    
+    <div class="callout">
+        <strong>Key Value Proposition:</strong> Every answer is grounded in the source document with page-level citations, eliminating hallucination and enabling verification.
+    </div>
+    
+    <h3>Core Capabilities</h3>
+    <ul>
+        <li>PDF upload and processing with page-aware chunking</li>
+        <li>Hybrid retrieval (dense + sparse vectors) for maximum recall</li>
+        <li>Cross-encoder reranking for precision</li>
+        <li>LLM-powered answer generation with citation enforcement</li>
+        <li>Real-time query interface with source attribution</li>
+    </ul>
+    
+    <h3>Tech Stack</h3>
+    <table>
+        <tr><th>Component</th><th>Technology</th></tr>
+        <tr><td>Backend</td><td>FastAPI (Python 3.13)</td></tr>
+        <tr><td>Vector Database</td><td>Qdrant (Docker)</td></tr>
+        <tr><td>Embeddings</td><td>sentence-transformers (all-MiniLM-L6-v2)</td></tr>
+        <tr><td>Reranker</td><td>cross-encoder (ms-marco-MiniLM-L-6-v2)</td></tr>
+        <tr><td>LLM</td><td>Ollama (local) / Gemini (cloud fallback)</td></tr>
+        <tr><td>PDF Parsing</td><td>PyMuPDF</td></tr>
+        <tr><td>Metadata DB</td><td>SQLite (aiosqlite)</td></tr>
+        <tr><td>Frontend</td><td>HTML/CSS/JavaScript</td></tr>
+    </table>
+</div>
+
+<!-- Page 3: RAG Architecture -->
+<div class="page page-break">
+    <h2>2. RAG Architecture</h2>
+    
+    <p>DocuMindRAG implements a full RAG pipeline with two distinct phases: <strong>Ingestion</strong> (indexing) and <strong>Retrieval</strong> (querying).</p>
+    
+    <h3>System Architecture</h3>
+    <div class="architecture-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                         DocuMindRAG System                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌─────────────┐        ┌─────────────────────────────────────┐     │
+│  │   Browser   │◄──────►│         FastAPI Backend              │     │
+│  │   (HTML)    │  HTTP  │                                     │     │
+│  └─────────────┘        │  ┌──────────┐  ┌──────────────┐    │     │
+│                         │  │ Ingestion │  │   Retrieval  │    │     │
+│                         │  │ Pipeline  │  │   Pipeline   │    │     │
+│                         │  └─────┬────┘  └──────┬───────┘    │     │
+│                         └────────┼───────────────┼────────────┘     │
+│                                  │               │                   │
+│                    ┌─────────────┼───────────────┼─────────┐        │
+│                    │             ▼               ▼         │        │
+│                    │  ┌──────────────┐  ┌──────────────┐  │        │
+│                    │  │    Qdrant    │  │   SQLite     │  │        │
+│                    │  │  (Vectors)   │  │  (Metadata)  │  │        │
+│                    │  └──────────────┘  └──────────────┘  │        │
+│                    │         Vector DB        Metadata DB   │        │
+│                    └───────────────────────────────────────┘        │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘</div>
+    
+    <h3>2.1 Ingestion Pipeline</h3>
+    <p>The ingestion pipeline transforms raw PDFs into searchable vector embeddings:</p>
+    
+    <ol>
+        <li><strong>PDF Parsing</strong> (PyMuPDF): Extract text from each page</li>
+        <li><strong>Page-Aware Chunking</strong>: Split pages into 512-token chunks with 128-token overlap</li>
+        <li><strong>Embedding Generation</strong>: Convert chunks to 384-dim dense vectors using all-MiniLM-L6-v2</li>
+        <li><strong>Sparse Vector Generation</strong>: Build BM25-style sparse vectors for keyword matching</li>
+        <li><strong>Qdrant Upsert</strong>: Store dense + sparse vectors with payload metadata</li>
+        <li><strong>SQLite Storage</strong>: Store document and chunk metadata for citation retrieval</li>
+    </ol>
+</div>
+
+<!-- Page 4: Retrieval Pipeline -->
+<div class="page page-break">
+    <h2>3. Retrieval Pipeline</h2>
+    
+    <p>The retrieval pipeline finds the most relevant chunks and generates grounded answers:</p>
+    
+    <h3>3.1 Hybrid Search</h3>
+    <div class="architecture-box">
+Query → [Dense Search] + [Sparse Search] → RRF Fusion → Rerank → Top-K Results
+         (Semantic)      (Keywords)         (Combine)     (Precision)   (Final)
+</div>
+    
+    <table>
+        <tr><th>Step</th><th>Method</th><th>Purpose</th><th>Top-K</th></tr>
+        <tr><td>1</td><td>Dense Search</td><td>Semantic similarity via embeddings</td><td>20</td></tr>
+        <tr><td>2</td><td>Sparse Search</td><td>Exact keyword matching (BM25)</td><td>20</td></tr>
+        <tr><td>3</td><td>RRF Fusion</td><td>Combine ranked lists (k=60)</td><td>20</td></tr>
+        <tr><td>4</td><td>Cross-Encoder Rerank</td><td>Precision reranking</td><td>5</td></tr>
+    </table>
+    
+    <h3>3.2 Reciprocal Rank Fusion (RRF)</h3>
+    <p>RRF combines results from multiple retrieval methods without requiring score normalization:</p>
+    <pre><code>score(d) = Σ 1/(k + rank_i(d))
+
+where:
+  k = 60 (standard constant)
+  rank_i(d) = rank of document d in result list i</code></pre>
+    
+    <h3>3.3 Answer Generation</h3>
+    <p>The final answer is generated by an LLM with strict citation rules:</p>
+    <ul>
+        <li>Context chunks are formatted with page markers: <code>{text} [p.X]</code></li>
+        <li>System prompt enforces citation requirements</li>
+        <li>LLM must cite page numbers for every factual claim</li>
+        <li>If context is insufficient, LLM says "I don't have enough information"</li>
+    </ul>
+    
+    <div class="callout">
+        <strong>Citation Prompt:</strong> "For every factual claim, cite the page number like [p.X] or [p.X, p.Y]. If the context doesn't contain enough information, say so explicitly."
+    </div>
+</div>
+
+<!-- Page 5: API Reference -->
+<div class="page page-break">
+    <h2>4. API Reference</h2>
+    
+    <p>The application exposes a RESTful API at <code>http://localhost:8000</code>:</p>
+    
+    <h3>Endpoints</h3>
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+        <tr><td><span class="badge">GET</span></td><td><code>/</code></td><td>Web frontend</td></tr>
+        <tr><td><span class="badge">GET</span></td><td><code>/health</code></td><td>Health check (API + Qdrant status)</td></tr>
+        <tr><td><span class="badge">POST</span></td><td><code>/upload</code></td><td>Upload and ingest a PDF</td></tr>
+        <tr><td><span class="badge">GET</span></td><td><code>/documents</code></td><td>List all uploaded documents</td></tr>
+        <tr><td><span class="badge">DEL</span></td><td><code>/documents/{id}</code></td><td>Delete a document</td></tr>
+        <tr><td><span class="badge">POST</span></td><td><code>/query</code></td><td>Ask a question</td></tr>
+    </table>
+    
+    <h3>Request/Response Examples</h3>
+    
+    <h4>Upload PDF</h4>
+    <pre><code>POST /upload
+Content-Type: multipart/form-data
+
+Response 200:
+{
+    "doc_id": "fde6ab7a-...",
+    "status": "ready",
+    "name": "report.pdf",
+    "page_count": 3,
+    "chunk_count": 1
+}</code></pre>
+    
+    <h4>Query</h4>
+    <pre><code>POST /query
+Content-Type: application/json
+
+{
+    "query": "What was the revenue in 2025?",
+    "top_k": 5
+}
+
+Response 200:
+{
+    "answer": "The revenue in 2025 was $247.3 million [p.1].",
+    "citations": [
+        {
+            "chunk_id": "...",
+            "page_number": 1,
+            "chunk_text": "TechVision Inc. achieved record revenue...",
+            "retrieval_score": 0.8734
+        }
+    ],
+    "timing_ms": 2340.5,
+    "model_used": "qwen2.5:0.5b"
+}</code></pre>
+</div>
+
+<!-- Page 6: Data Model -->
+<div class="page page-break">
+    <h2>5. Data Model</h2>
+    
+    <h3>5.1 SQLite Schema</h3>
+    
+    <h4>documents</h4>
+    <table>
+        <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+        <tr><td>id</td><td>TEXT (UUID)</td><td>Primary key</td></tr>
+        <tr><td>name</td><td>TEXT</td><td>Original filename</td></tr>
+        <tr><td>page_count</td><td>INTEGER</td><td>Number of pages</td></tr>
+        <tr><td>chunk_count</td><td>INTEGER</td><td>Number of chunks</td></tr>
+        <tr><td>status</td><td>TEXT</td><td>processing / ready / error</td></tr>
+        <tr><td>created_at</td><td>TIMESTAMP</td><td>Upload time</td></tr>
+    </table>
+    
+    <h4>chunks</h4>
+    <table>
+        <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+        <tr><td>id</td><td>TEXT (UUID)</td><td>Primary key</td></tr>
+        <tr><td>doc_id</td><td>TEXT</td><td>Foreign key → documents</td></tr>
+        <tr><td>page_number</td><td>INTEGER</td><td>Page number (1-indexed)</td></tr>
+        <tr><td>chunk_index</td><td>INTEGER</td><td>Order within page</td></tr>
+        <tr><td>text</td><td>TEXT</td><td>Raw chunk text</td></tr>
+        <tr><td>char_start</td><td>INTEGER</td><td>Character offset start</td></tr>
+        <tr><td>char_end</td><td>INTEGER</td><td>Character offset end</td></tr>
+    </table>
+    
+    <h3>5.2 Qdrant Collection</h3>
+    <p>Collection name: <code>documind_chunks</code></p>
+    
+    <table>
+        <tr><th>Vector</th><th>Type</th><th>Dimensions</th><th>Distance</th></tr>
+        <tr><td>dense</td><td>Dense</td><td>384</td><td>Cosine</td></tr>
+        <tr><td>sparse</td><td>Sparse (BM25)</td><td>Variable</td><td>Dot</td></tr>
+    </table>
+    
+    <p><strong>Payload:</strong> <code>{doc_id, page_number, chunk_index, text, char_start, char_end}</code></p>
+    
+    <h3>5.3 Chunking Strategy</h3>
+    <ul>
+        <li><strong>Target chunk size:</strong> 512 tokens (~2000 characters)</li>
+        <li><strong>Overlap:</strong> 128 tokens (25%)</li>
+        <li><strong>Max chunk size:</strong> 1024 tokens</li>
+        <li><strong>Merging:</strong> Small pages merge with next page until threshold</li>
+    </ul>
+</div>
+
+<!-- Page 7: Configuration -->
+<div class="page page-break">
+    <h2>6. Configuration</h2>
+    
+    <p>All settings are configured via environment variables or <code>.env</code> file:</p>
+    
+    <table>
+        <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>QDRANT_HOST</code></td><td>localhost</td><td>Qdrant server host</td></tr>
+        <tr><td><code>QDRANT_PORT</code></td><td>6333</td><td>Qdrant HTTP port</td></tr>
+        <tr><td><code>EMBEDDING_MODEL</code></td><td>all-MiniLM-L6-v2</td><td>Sentence transformer model</td></tr>
+        <tr><td><code>RERANKER_MODEL</code></td><td>ms-marco-MiniLM-L-6-v2</td><td>Cross-encoder reranker</td></tr>
+        <tr><td><code>GEMINI_API_KEY</code></td><td>(empty)</td><td>Google Gemini API key</td></tr>
+        <tr><td><code>GEMINI_MODEL</code></td><td>gemini-2.0-flash</td><td>Gemini model name</td></tr>
+        <tr><td><code>OLLAMA_MODEL</code></td><td>qwen2.5:0.5b</td><td>Ollama model name</td></tr>
+        <tr><td><code>CHUNK_SIZE_TOKENS</code></td><td>512</td><td>Target chunk size</td></tr>
+        <tr><td><code>CHUNK_OVERLAP_TOKENS</code></td><td>128</td><td>Chunk overlap</td></tr>
+        <tr><td><code>DENSE_TOP_K</code></td><td>20</td><td>Dense retrieval results</td></tr>
+        <tr><td><code>SPARSE_TOP_K</code></td><td>20</td><td>Sparse retrieval results</td></tr>
+        <tr><td><code>RRF_K</code></td><td>60</td><td>RRF constant</td></tr>
+        <tr><td><code>RERANK_TOP_K</code></td><td>5</td><td>Final results after reranking</td></tr>
+    </table>
+    
+    <h3>LLM Fallback Chain</h3>
+    <div class="architecture-box">
+Gemini API Key configured?
+    │
+    ├── YES → Try Gemini API
+    │         │
+    │         ├── Success → Return answer (model: gemini-2.0-flash)
+    │         │
+    │         └── Failure → Fall back to Ollama
+    │                       │
+    │                       ├── Success → Return answer (model: qwen2.5:0.5b)
+    │                       │
+    │                       └── Failure → Return error message
+    │
+    └── NO → Try Ollama directly
+             │
+             ├── Success → Return answer
+             │
+             └── Failure → Return error message
+</div>
+</div>
+
+<!-- Page 8: Deployment -->
+<div class="page page-break">
+    <h2>7. Deployment & Setup</h2>
+    
+    <h3>Prerequisites</h3>
+    <ul>
+        <li>Python 3.11+</li>
+        <li>Docker Desktop (for Qdrant)</li>
+        <li>Ollama (for local LLM)</li>
+    </ul>
+    
+    <h3>Quick Start</h3>
+    <pre><code># Clone and enter the project
+cd DocuMindRAG
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate   # Windows
+# source venv/bin/activate  # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy environment config
+cp .env.example .env
+# Edit .env with your API keys
+
+# Start Qdrant
+docker compose up -d
+
+# Pull LLM model (optional, for local inference)
+ollama pull qwen2.5:0.5b
+
+# Start the server
+python run.py</code></pre>
+    
+    <h3>Project Structure</h3>
+    <div class="architecture-box">
+DocuMindRAG/
+├── app/
+│   ├── main.py              # FastAPI app + routes
+│   ├── config.py            # Settings (env vars)
+│   ├── db.py                # SQLite connection + schema
+│   ├── models.py            # Pydantic schemas
+│   ├── ingestion/
+│   │   ├── pdf_parser.py    # PDF → pages
+│   │   ├── chunker.py       # Pages → chunks
+│   │   └── embedder.py      # Chunks → vectors → Qdrant
+│   ├── retrieval/
+│   │   ├── search.py        # Dense + sparse + RRF
+│   │   ├── reranker.py      # Cross-encoder reranking
+│   │   └── answer.py        # LLM answer generation
+│   └── services/
+│       └── document_service.py  # Orchestration
+├── static/
+│   ├── index.html           # Frontend
+│   ├── css/style.css        # Styling
+│   └── js/app.js            # API calls
+├── sample_pdfs/             # Test documents
+├── docker-compose.yml       # Qdrant
+├── requirements.txt
+├── .env.example
+└── README.md</div>
+    
+    <h3>Access Points</h3>
+    <table>
+        <tr><th>Service</th><th>URL</th></tr>
+        <tr><td>Web Frontend</td><td>http://localhost:8000</td></tr>
+        <tr><td>API Documentation</td><td>http://localhost:8000/docs</td></tr>
+        <tr><td>Qdrant Dashboard</td><td>http://localhost:6333/dashboard</td></tr>
+    </table>
+</div>
+
+<!-- Page 9: Design Decisions -->
+<div class="page page-break">
+    <h2>8. Design Decisions</h2>
+    
+    <h3>Why Hybrid Retrieval?</h3>
+    <p>Dense retrieval captures semantic similarity but may miss exact keyword matches. Sparse retrieval (BM25) excels at keyword matching but lacks semantic understanding. RRF fusion combines both strengths without requiring score normalization.</p>
+    
+    <h3>Why Cross-Encoder Reranking?</h3>
+    <p>Cross-encoders process query-document pairs jointly, providing higher accuracy than bi-encoders used in initial retrieval. The 200-500ms overhead is acceptable for the quality improvement.</p>
+    
+    <h3>Why Page-Aware Chunking?</h3>
+    <p>Standard text splitting breaks page boundaries, making citations inaccurate. Page-aware chunking preserves page information, enabling exact page-level citations in answers.</p>
+    
+    <h3>Why RRF over Linear Combination?</h3>
+    <p>RRF is parameter-free and robust to different score distributions across retrieval methods. Linear combination requires tuning weights and normalizing scores.</p>
+    
+    <h2>9. Future Enhancements</h2>
+    
+    <h3>Short-term</h3>
+    <ul>
+        <li>Semantic chunking (sentence-boundary detection)</li>
+        <li>Streaming responses for better UX</li>
+        <li>Multi-format support (Word, HTML, Markdown)</li>
+        <li>Batch ingestion for multiple PDFs</li>
+    </ul>
+    
+    <h3>Medium-term</h3>
+    <ul>
+        <li>PostgreSQL migration for production</li>
+        <li>User authentication and multi-tenancy</li>
+        <li>Custom embedding fine-tuning</li>
+        <li>PDF viewer with highlighted citations</li>
+    </ul>
+    
+    <h3>Long-term</h3>
+    <ul>
+        <li>Multi-modal RAG (images, tables)</li>
+        <li>Agentic RAG with tool use</li>
+        <li>Knowledge graph integration</li>
+        <li>Enterprise deployment (Kubernetes)</li>
+    </ul>
+    
+    <div class="footer">
+        DocuMindRAG v0.1.0 | Technical Documentation | August 2026
+    </div>
+</div>
+
+</body>
+</html>

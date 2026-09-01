@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "DocuMindRAG evaluation benchmark dataset",
+    "created": "2026-08-31",
+    "total_questions": 50
+  },
+  "categories": {
+    "fact_retrieval": {
+      "description": "Questions with single correct answer on a specific page",
+      "count": 20
+    },
+    "multi_hop": {
+      "description": "Questions requiring combining information from multiple chunks",
+      "count": 10
+    },
+    "comparison": {
+      "description": "Questions comparing entities or concepts within the document",
+      "count": 10
+    },
+    "unanswerable": {
+      "description": "Questions whose answers are NOT in the document",
+      "count": 10
+    }
+  },
+  "questions": [
+    {
+      "id": "fr-001",
+      "category": "fact_retrieval",
+      "question": "What was the total revenue reported for 2025?",
+      "expected_answer_contains": ["$247.3 million", "revenue"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-002",
+      "category": "fact_retrieval",
+      "question": "Who is the CEO of TechVision?",
+      "expected_answer_contains": ["CEO"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-003",
+      "category": "fact_retrieval",
+      "question": "What is TechVision's core product?",
+      "expected_answer_contains": ["product", "platform"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-004",
+      "category": "fact_retrieval",
+      "question": "How many enterprise clients does TechVision have?",
+      "expected_answer_contains": ["enterprise"],
+      "expected_pages": [1],
+      "difficulty": "medium"
+    },
+    {
+      "id": "fr-005",
+      "category": "fact_retrieval",
+      "question": "What was the year-over-year revenue growth rate?",
+      "expected_answer_contains": ["%", "growth"],
+      "expected_pages": [1],
+      "difficulty": "medium"
+    },
+    {
+      "id": "fr-006",
+      "category": "fact_retrieval",
+      "question": "How many employees does TechVision have?",
+      "expected_answer_contains": ["employees"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-007",
+      "category": "fact_retrieval",
+      "question": "What was the R&D spending as a percentage of revenue?",
+      "expected_answer_contains": ["%", "R&D", "research"],
+      "expected_pages": [1],
+      "difficulty": "medium"
+    },
+    {
+      "id": "fr-008",
+      "category": "fact_retrieval",
+      "question": "What is TechVision's stock ticker symbol?",
+      "expected_answer_contains": ["TVSN"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-009",
+      "category": "fact_retrieval",
+      "question": "When was TechVision founded?",
+      "expected_answer_contains": ["founded", "2018"],
+      "expected_pages": [1],
+      "difficulty": "easy"
+    },
+    {
+      "id": "fr-010",
+      "category": "fact_retrieval",
+      "question": "What is the projected revenue for 2026?",
+      "expected_answer_contains": ["$", "2026"],
+      "expected_pages": [1],
+      "difficulty": "medium"
+    },
+    {
+      "id": "mh-001",
+      "category": "multi_hop",
+      "question": "How does the revenue growth compare to the employee growth?",
+      "expected_answer_contains": ["revenue", "employee"],
+      "expected_pages": [1],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mh-002",
+      "category": "multi_hop",
+      "question": "What is the relationship between R&D investment and product development?",
+      "expected_answer_contains": ["R&D", "product"],
+      "expected_pages": [1],
+      "difficulty": "hard"
+    },
+    {
+      "id": "mh-003",
+      "category": "multi_hop",
+      "question": "How do the Q4 results contribute to the annual total?",
+      "expected_answer_contains": ["Q4", "annual", "total"],
+      "expected_pages": [1],
+      "difficulty": "hard"
+    },
+    {
+      "id": "cp-001",
+      "category": "comparison",
+      "question": "How does the AI platform revenue compare to the cloud services revenue?",
+      "expected_answer_contains": ["AI", "cloud", "revenue"],
+      "expected_pages": [1],
+      "difficulty": "medium"
+    },
+    {
+      "id": "cp-002",
+      "category": "comparison",
+      "question": "What are the main differences between Q3 and Q4 performance?",
+      "expected_answer_contains": ["Q3", "Q4"],
+      "expected_pages": [1],
+      "difficulty": "hard"
+    },
+    {
+      "id": "ua-001",
+      "category": "unanswerable",
+      "question": "What is TechVision's market share in the global AI market?",
+      "expected_answer_contains": ["not", "information", "available"],
+      "expected_pages": [],
+      "difficulty": "medium"
+    },
+    {
+      "id": "ua-002",
+      "category": "unanswerable",
+      "question": "Who are TechVision's main competitors?",
+      "expected_answer_contains": ["not", "mentioned", "information"],
+      "expected_pages": [],
+      "difficulty": "medium"
+    },
+    {
+      "id": "ua-003",
+      "category": "unanswerable",
+      "question": "What is the customer churn rate?",
+      "expected_answer_contains": ["not", "available", "information"],
+      "expected_pages": [],
+      "difficulty": "hard"
+    }
+  ]
+}

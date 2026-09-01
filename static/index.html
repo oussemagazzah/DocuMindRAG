@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuMindRAG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app">
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">DM</div>
+                    <div class="logo-text">
+                        <h1>DocuMindRAG</h1>
+                        <span>PDF Q&A with citations</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="section">
+                    <h3 class="section-title">Upload Document</h3>
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept=".pdf" hidden>
+                        <div class="upload-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4l4 4M4 20h16"/></svg>
+                        </div>
+                        <p class="upload-text">Drop PDF here or click to browse</p>
+                        <p class="upload-hint">Max 50MB</p>
+                    </div>
+                    <div class="upload-status" id="uploadStatus"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h3 class="section-title">Documents</h3>
+                        <button class="btn-icon" id="refreshBtn" title="Refresh">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </button>
+                    </div>
+                    <p class="sidebar-hint">Select documents to query across</p>
+                    <div class="doc-list" id="docList">
+                        <p class="empty-state">No documents uploaded</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Tools</h3>
+                    <div class="tool-buttons">
+                        <button class="btn-tool" id="analyticsBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            Analytics
+                        </button>
+                        <button class="btn-tool" id="evalBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                            Run Eval
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span>Connected</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="main-header">
+                <h2>Ask your documents</h2>
+                <p>Get answers with exact page citations from your uploaded PDFs.</p>
+            </div>
+
+            <div class="query-section">
+                <div class="input-group">
+                    <label for="queryInput" class="sr-only">Ask a question</label>
+                    <textarea id="queryInput" placeholder="What was the revenue in 2025?" rows="2"></textarea>
+                    <button class="btn-primary" id="queryBtn" aria-label="Submit query">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        Ask
+                    </button>
+                </div>
+                <div class="examples">
+                    <span class="examples-label">Try:</span>
+                    <button class="example-chip" data-query="What was the total revenue in 2025?">Revenue 2025</button>
+                    <button class="example-chip" data-query="Who is the CEO?">CEO</button>
+                    <button class="example-chip" data-query="What products does TechVision offer?">Products</button>
+                    <button class="example-chip" data-query="What are the 2026 guidance numbers?">2026 Guidance</button>
+                    <button class="example-chip" data-query="Which strategic partnerships were mentioned?">Partnerships</button>
+                </div>
+            </div>
+
+            <div class="loading-state" id="loadingState" style="display:none">
+                <div class="spinner"></div>
+                <span>Searching documents...</span>
+            </div>
+
+            <div class="answer-section" id="answerSection" style="display:none">
+                <div class="answer-card">
+                    <div class="answer-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Answer</span>
+                    </div>
+                    <div class="answer-content" id="answerContent"></div>
+                </div>
+
+                <div class="citations-card">
+                    <div class="citations-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span>Sources</span>
+                    </div>
+                    <div class="citations-list" id="citationsList"></div>
+                </div>
+
+                <div class="feedback-section" id="feedbackSection" style="display:none">
+                    <button class="feedback-btn feedback-up" onclick="submitFeedback('thumbs_up')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                        Helpful
+                    </button>
+                    <button class="feedback-btn feedback-down" onclick="submitFeedback('thumbs_down')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10zM17 2h3a2 2 0 012 2v7a2 2 0 01-2 2h-3"/></svg>
+                        Not helpful
+                    </button>
+                </div>
+
+                <div class="timing-footer" id="timingFooter"></div>
+            </div>
+
+            <div class="empty-query" id="emptyState">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <h3>Ready to answer</h3>
+                <p>Upload a PDF and ask a question to get started.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div class="modal-overlay" id="analyticsModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Analytics Dashboard</h3>
+                <button class="modal-close" id="analyticsClose">&times;</button>
+            </div>
+            <div class="modal-body" id="analyticsContent"></div>
+        </div>
+    </div>
+
+    <!-- Eval Modal -->
+    <div class="modal-overlay" id="evalModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Evaluation Dashboard</h3>
+                <button class="modal-close" id="evalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-muted);margin-bottom:12px">Run benchmark queries against a selected document to measure quality.</p>
+                <button class="btn-primary btn-eval-run" id="evalRunBtn" style="margin-bottom:16px">Run Evaluation</button>
+                <div id="evalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citation Viewer Modal -->
+    <div class="modal-overlay" id="viewerModal" style="display:none">
+        <div class="modal modal-wide">
+            <div class="modal-header">
+                <h3>Citation Viewer</h3>
+                <button class="modal-close" id="viewerClose">&times;</button>
+            </div>
+            <div class="modal-body" id="viewerContent"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
