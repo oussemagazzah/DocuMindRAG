@@ -222,4 +222,4 @@ MIT
 
 ---
 
-Built by Oussema — [LinkedIn](https://linkedin.com/in/username) | [GitHub](https://github.com/username)
+Built by Oussema Gazzeh — [LinkedIn](https://linkedin.com/in/oussemagazzeh) | [GitHub](https://github.com/oussemagazzah) | [Website](https://oussemagazzeh.me)
