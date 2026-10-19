@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     qdrant_host: str = "localhost"
     qdrant_port: int = 6333
     qdrant_grpc_port: int = 6334
+    # ":memory:" or a local folder runs Qdrant in-process (eval, CI, demo); empty = use host/port
+    qdrant_location: str = ""
     collection_name: str = "documind_chunks"
 
     # Embeddings
@@ -36,6 +38,11 @@ class Settings(BaseSettings):
     sparse_top_k: int = 20
     rrf_k: int = 60
     rerank_top_k: int = 5
+
+    # BM25 (term-frequency part; IDF is applied by Qdrant at query time)
+    bm25_k1: float = 1.2
+    bm25_b: float = 0.75
+    bm25_avg_doc_len: float = 300.0
 
     # Database (PostgreSQL or SQLite)
     database_url: str = ""

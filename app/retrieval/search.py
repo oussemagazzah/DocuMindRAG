@@ -1,10 +1,10 @@
 """Hybrid search combining dense and sparse retrieval with RRF fusion."""
 
 from dataclasses import dataclass
-from qdrant_client.models import Filter, FieldCondition, MatchValue, SparseVector
+from qdrant_client.models import Filter, FieldCondition, MatchAny
 
 from app.config import get_settings
-from app.ingestion.embedder import get_embedding_model, get_qdrant_client, build_sparse_vector
+from app.ingestion.embedder import get_embedding_model, get_qdrant_client, build_sparse_query_vector
 from app.logging_config import get_logger
 
 settings = get_settings()
@@ -27,9 +27,8 @@ class SearchResult:
 def _build_qdrant_filter(doc_ids: list[str] | None) -> Filter | None:
     if not doc_ids:
         return None
-    return Filter(
-        must=[FieldCondition(key="doc_id", match=MatchValue(value=did)) for did in doc_ids]
-    )
+    # A chunk belongs to exactly one document, so match ANY of the requested ids.
+    return Filter(must=[FieldCondition(key="doc_id", match=MatchAny(any=doc_ids))])
 
 
 def _hit_to_result(hit, source: str) -> SearchResult:
@@ -67,8 +66,7 @@ def dense_search(query: str, top_k: int, doc_ids: list[str] | None = None) -> li
 
 
 def sparse_search(query: str, top_k: int, doc_ids: list[str] | None = None) -> list[SearchResult]:
-    raw = build_sparse_vector(query)
-    sparse_vector = SparseVector(indices=raw.indices, values=raw.values)
+    sparse_vector = build_sparse_query_vector(query)
 
     client = get_qdrant_client()
     query_filter = _build_qdrant_filter(doc_ids)
