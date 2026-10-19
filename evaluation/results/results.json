@@ -1,0 +1,2833 @@
+{
+  "benchmark": {
+    "version": "2.0",
+    "total_questions": 50
+  },
+  "retrieval": {
+    "environment": {
+      "generated_at": "2026-10-19 16:59 UTC",
+      "git_commit": "fb92bbd",
+      "seed": 0,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "reranker_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+      "reranker_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "chunk_size_tokens": 512,
+      "chunk_overlap_tokens": 128,
+      "dense_top_k": 20,
+      "sparse_top_k": 20,
+      "rrf_k": 60,
+      "rerank_top_k": 5,
+      "bm25_k1": 1.2,
+      "bm25_b": 0.75,
+      "bm25_avg_doc_len": 300.0,
+      "index": {
+        "oecd_interim_2025_09": {
+          "pages": 24,
+          "chunks": 48
+        },
+        "ragas_2023": {
+          "pages": 8,
+          "chunks": 24
+        },
+        "beir_2021": {
+          "pages": 24,
+          "chunks": 74
+        }
+      },
+      "corpus_pages": 56,
+      "corpus_chunks": 146,
+      "total_questions": 50,
+      "answerable_questions": 40,
+      "latency_repeats": 3,
+      "cpu": "11th Gen Intel(R) Core(TM) i5-11400F @ 2.60GHz",
+      "cpu_count": 12,
+      "ram_gb": 15.8,
+      "device": "cpu",
+      "torch": "2.13.0+cpu",
+      "torch_threads": 6,
+      "sentence_transformers": "3.3.1",
+      "qdrant_client": "1.12.1",
+      "python": "3.13.1",
+      "os": "Windows 11"
+    },
+    "configs": {
+      "dense": {
+        "label": "Dense only (all-MiniLM-L6-v2)",
+        "overall": {
+          "recall@1": 0.5375,
+          "recall@3": 0.725,
+          "recall@5": 0.8625,
+          "mrr@10": 0.7212,
+          "ndcg@5": 0.7351,
+          "n": 40,
+          "ci95": {
+            "recall@5": [
+              0.75,
+              0.95
+            ],
+            "mrr@10": [
+              0.6151,
+              0.8294
+            ]
+          }
+        },
+        "by_category": {
+          "fact_retrieval": {
+            "recall@1": 0.6,
+            "recall@3": 0.65,
+            "recall@5": 0.8,
+            "mrr@10": 0.6882,
+            "ndcg@5": 0.694,
+            "n": 20
+          },
+          "multi_hop": {
+            "recall@1": 0.25,
+            "recall@3": 0.7,
+            "recall@5": 0.85,
+            "mrr@10": 0.7,
+            "ndcg@5": 0.6965,
+            "n": 10
+          },
+          "comparison": {
+            "recall@1": 0.7,
+            "recall@3": 0.9,
+            "recall@5": 1.0,
+            "mrr@10": 0.8083,
+            "ndcg@5": 0.8562,
+            "n": 10
+          }
+        },
+        "latency_ms": {
+          "median": 16.4,
+          "p95": 29.3,
+          "n": 150
+        },
+        "per_question": [
+          {
+            "id": "fr-001",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-002",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.16666666666666666,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p23"
+            ]
+          },
+          {
+            "id": "fr-003",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "fr-004",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "fr-005",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p18"
+            ]
+          },
+          {
+            "id": "fr-006",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p10",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "fr-007",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.1111111111111111,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p15",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "fr-008",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.14285714285714285,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "beir_2021:p22",
+              "ragas_2023:p7"
+            ]
+          },
+          {
+            "id": "fr-009",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.43067655807339306,
+            "top_pages": [
+              "beir_2021:p18",
+              "beir_2021:p13",
+              "beir_2021:p20",
+              "ragas_2023:p4",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "fr-010",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "ragas_2023:p1",
+              "beir_2021:p10",
+              "beir_2021:p13"
+            ]
+          },
+          {
+            "id": "fr-011",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p3",
+              "ragas_2023:p1",
+              "ragas_2023:p6"
+            ]
+          },
+          {
+            "id": "fr-012",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "beir_2021:p10",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "fr-013",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.43067655807339306,
+            "top_pages": [
+              "ragas_2023:p2",
+              "ragas_2023:p5",
+              "beir_2021:p20",
+              "ragas_2023:p3",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "fr-014",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.2,
+            "ndcg@5": 0.38685280723454163,
+            "top_pages": [
+              "beir_2021:p4",
+              "beir_2021:p17",
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "fr-015",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.14285714285714285,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p22",
+              "beir_2021:p8",
+              "beir_2021:p4",
+              "beir_2021:p6"
+            ]
+          },
+          {
+            "id": "fr-016",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p5",
+              "beir_2021:p22",
+              "beir_2021:p7",
+              "beir_2021:p24"
+            ]
+          },
+          {
+            "id": "fr-017",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p5",
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "fr-018",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p4",
+              "beir_2021:p18",
+              "beir_2021:p8",
+              "beir_2021:p13"
+            ]
+          },
+          {
+            "id": "fr-019",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p4",
+              "beir_2021:p17",
+              "beir_2021:p9",
+              "beir_2021:p24"
+            ]
+          },
+          {
+            "id": "fr-020",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p4",
+              "beir_2021:p17",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "mh-001",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.8772153153380493,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-002",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p4",
+              "oecd_interim_2025_09:p16"
+            ]
+          },
+          {
+            "id": "mh-003",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "mh-004",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.3065735963827292,
+            "top_pages": [
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "mh-005",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p1",
+              "ragas_2023:p2",
+              "ragas_2023:p3",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "mh-006",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "mh-007",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.5437713091520254,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p1",
+              "ragas_2023:p3"
+            ]
+          },
+          {
+            "id": "mh-008",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6934264036172708,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p8",
+              "beir_2021:p22",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "mh-009",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.3065735963827292,
+            "top_pages": [
+              "ragas_2023:p1",
+              "ragas_2023:p3",
+              "beir_2021:p7",
+              "beir_2021:p4",
+              "beir_2021:p8"
+            ]
+          },
+          {
+            "id": "mh-010",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6240505200038379,
+            "top_pages": [
+              "beir_2021:p4",
+              "beir_2021:p7",
+              "beir_2021:p16",
+              "beir_2021:p22",
+              "beir_2021:p20"
+            ]
+          },
+          {
+            "id": "cmp-001",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p14"
+            ]
+          },
+          {
+            "id": "cmp-002",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "cmp-003",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.5,
+            "top_pages": [
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p15",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "cmp-004",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p23"
+            ]
+          },
+          {
+            "id": "cmp-005",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p1",
+              "beir_2021:p8",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "cmp-006",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.43067655807339306,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p7"
+            ]
+          },
+          {
+            "id": "cmp-007",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "beir_2021:p5",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "cmp-008",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p4",
+              "beir_2021:p9",
+              "beir_2021:p17"
+            ]
+          },
+          {
+            "id": "cmp-009",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p5",
+              "beir_2021:p22",
+              "beir_2021:p7",
+              "beir_2021:p21"
+            ]
+          },
+          {
+            "id": "cmp-010",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p24",
+              "beir_2021:p9",
+              "beir_2021:p4"
+            ]
+          }
+        ]
+      },
+      "bm25": {
+        "label": "Sparse only (BM25)",
+        "overall": {
+          "recall@1": 0.6875,
+          "recall@3": 0.925,
+          "recall@5": 0.9625,
+          "mrr@10": 0.88,
+          "ndcg@5": 0.8852,
+          "n": 40,
+          "ci95": {
+            "recall@5": [
+              0.9,
+              1.0
+            ],
+            "mrr@10": [
+              0.8033,
+              0.95
+            ]
+          }
+        },
+        "by_category": {
+          "fact_retrieval": {
+            "recall@1": 0.75,
+            "recall@3": 0.95,
+            "recall@5": 1.0,
+            "mrr@10": 0.8517,
+            "ndcg@5": 0.889,
+            "n": 20
+          },
+          "multi_hop": {
+            "recall@1": 0.45,
+            "recall@3": 0.9,
+            "recall@5": 0.95,
+            "mrr@10": 0.95,
+            "ndcg@5": 0.8996,
+            "n": 10
+          },
+          "comparison": {
+            "recall@1": 0.8,
+            "recall@3": 0.9,
+            "recall@5": 0.9,
+            "mrr@10": 0.8667,
+            "ndcg@5": 0.8631,
+            "n": 10
+          }
+        },
+        "latency_ms": {
+          "median": 5.8,
+          "p95": 9.2,
+          "n": 150
+        },
+        "per_question": [
+          {
+            "id": "fr-001",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-002",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.5,
+            "top_pages": [
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p22"
+            ]
+          },
+          {
+            "id": "fr-003",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-004",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p24"
+            ]
+          },
+          {
+            "id": "fr-005",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p15",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "fr-006",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p20",
+              "oecd_interim_2025_09:p18",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "fr-007",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.2,
+            "ndcg@5": 0.38685280723454163,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p8"
+            ]
+          },
+          {
+            "id": "fr-008",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "beir_2021:p16",
+              "ragas_2023:p2",
+              "beir_2021:p5",
+              "ragas_2023:p5"
+            ]
+          },
+          {
+            "id": "fr-009",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p4",
+              "ragas_2023:p5",
+              "beir_2021:p3",
+              "beir_2021:p6",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "fr-010",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p4",
+              "beir_2021:p5",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "fr-011",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p1",
+              "beir_2021:p16",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "fr-012",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p4",
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p8",
+              "ragas_2023:p7"
+            ]
+          },
+          {
+            "id": "fr-013",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "beir_2021:p20",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "fr-014",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p1",
+              "beir_2021:p6",
+              "beir_2021:p4",
+              "beir_2021:p20",
+              "beir_2021:p16"
+            ]
+          },
+          {
+            "id": "fr-015",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p5",
+              "beir_2021:p6",
+              "beir_2021:p16",
+              "beir_2021:p8",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "fr-016",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p23",
+              "beir_2021:p24"
+            ]
+          },
+          {
+            "id": "fr-017",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p23",
+              "beir_2021:p8",
+              "beir_2021:p16",
+              "beir_2021:p7"
+            ]
+          },
+          {
+            "id": "fr-018",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p8",
+              "beir_2021:p16",
+              "beir_2021:p2",
+              "beir_2021:p23"
+            ]
+          },
+          {
+            "id": "fr-019",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "ragas_2023:p4",
+              "beir_2021:p16",
+              "beir_2021:p3",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "fr-020",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p19",
+              "beir_2021:p22",
+              "beir_2021:p6"
+            ]
+          },
+          {
+            "id": "mh-001",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "mh-002",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-003",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "mh-004",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p20",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "mh-005",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.9197207891481876,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p1",
+              "ragas_2023:p4",
+              "ragas_2023:p2",
+              "beir_2021:p16"
+            ]
+          },
+          {
+            "id": "mh-006",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p4",
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p3",
+              "ragas_2023:p8"
+            ]
+          },
+          {
+            "id": "mh-007",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6934264036172708,
+            "top_pages": [
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "mh-008",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.9197207891481876,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p3",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "mh-009",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p19",
+              "beir_2021:p8",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "mh-010",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.8503449055347546,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "oecd_interim_2025_09:p4",
+              "beir_2021:p9",
+              "beir_2021:p20"
+            ]
+          },
+          {
+            "id": "cmp-001",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p20",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p16"
+            ]
+          },
+          {
+            "id": "cmp-002",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "cmp-003",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "cmp-004",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "cmp-005",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "cmp-006",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p8",
+              "ragas_2023:p7",
+              "ragas_2023:p3"
+            ]
+          },
+          {
+            "id": "cmp-007",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "cmp-008",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p22",
+              "beir_2021:p13",
+              "beir_2021:p6",
+              "beir_2021:p3"
+            ]
+          },
+          {
+            "id": "cmp-009",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p21"
+            ]
+          },
+          {
+            "id": "cmp-010",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.16666666666666666,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p8",
+              "beir_2021:p6",
+              "beir_2021:p1",
+              "beir_2021:p3"
+            ]
+          }
+        ]
+      },
+      "hybrid": {
+        "label": "Hybrid (dense + BM25, RRF k=60)",
+        "overall": {
+          "recall@1": 0.65,
+          "recall@3": 0.8125,
+          "recall@5": 0.9125,
+          "mrr@10": 0.8383,
+          "ndcg@5": 0.8274,
+          "n": 40,
+          "ci95": {
+            "recall@5": [
+              0.825,
+              0.975
+            ],
+            "mrr@10": [
+              0.7508,
+              0.925
+            ]
+          }
+        },
+        "by_category": {
+          "fact_retrieval": {
+            "recall@1": 0.7,
+            "recall@3": 0.8,
+            "recall@5": 0.9,
+            "mrr@10": 0.7892,
+            "ndcg@5": 0.804,
+            "n": 20
+          },
+          "multi_hop": {
+            "recall@1": 0.4,
+            "recall@3": 0.75,
+            "recall@5": 0.85,
+            "mrr@10": 0.9,
+            "ndcg@5": 0.7954,
+            "n": 10
+          },
+          "comparison": {
+            "recall@1": 0.8,
+            "recall@3": 0.9,
+            "recall@5": 1.0,
+            "mrr@10": 0.875,
+            "ndcg@5": 0.9062,
+            "n": 10
+          }
+        },
+        "latency_ms": {
+          "median": 21.8,
+          "p95": 27.2,
+          "n": 150
+        },
+        "per_question": [
+          {
+            "id": "fr-001",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "fr-002",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.16666666666666666,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p7"
+            ]
+          },
+          {
+            "id": "fr-003",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p14"
+            ]
+          },
+          {
+            "id": "fr-004",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13"
+            ]
+          },
+          {
+            "id": "fr-005",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p15"
+            ]
+          },
+          {
+            "id": "fr-006",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p20",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "fr-007",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 0.0,
+            "mrr@10": 0.16666666666666666,
+            "ndcg@5": 0.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "fr-008",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "beir_2021:p16",
+              "ragas_2023:p3",
+              "ragas_2023:p1",
+              "ragas_2023:p5",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "fr-009",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p4",
+              "beir_2021:p18",
+              "beir_2021:p4",
+              "ragas_2023:p5",
+              "ragas_2023:p7"
+            ]
+          },
+          {
+            "id": "fr-010",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "ragas_2023:p1",
+              "ragas_2023:p4",
+              "beir_2021:p10"
+            ]
+          },
+          {
+            "id": "fr-011",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "ragas_2023:p3",
+              "ragas_2023:p4"
+            ]
+          },
+          {
+            "id": "fr-012",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p7",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "fr-013",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "beir_2021:p20",
+              "ragas_2023:p2",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "fr-014",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.2,
+            "ndcg@5": 0.38685280723454163,
+            "top_pages": [
+              "beir_2021:p4",
+              "beir_2021:p17",
+              "beir_2021:p20",
+              "beir_2021:p6",
+              "beir_2021:p1"
+            ]
+          },
+          {
+            "id": "fr-015",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.43067655807339306,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p6",
+              "beir_2021:p22",
+              "beir_2021:p5",
+              "beir_2021:p4"
+            ]
+          },
+          {
+            "id": "fr-016",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p24",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "fr-017",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p23",
+              "beir_2021:p8"
+            ]
+          },
+          {
+            "id": "fr-018",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p8",
+              "beir_2021:p4",
+              "beir_2021:p18",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "fr-019",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p4",
+              "beir_2021:p17",
+              "beir_2021:p2",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "fr-020",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p5",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "mh-001",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-002",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "mh-003",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-004",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.8503449055347546,
+            "top_pages": [
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p20"
+            ]
+          },
+          {
+            "id": "mh-005",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p1",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "mh-006",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "mh-007",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6509209298071326,
+            "top_pages": [
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "mh-008",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6934264036172708,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p6",
+              "beir_2021:p22",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "mh-009",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p1",
+              "beir_2021:p19",
+              "beir_2021:p8",
+              "beir_2021:p9"
+            ]
+          },
+          {
+            "id": "mh-010",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.9197207891481876,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p20",
+              "beir_2021:p4",
+              "beir_2021:p16"
+            ]
+          },
+          {
+            "id": "cmp-001",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p14"
+            ]
+          },
+          {
+            "id": "cmp-002",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p14"
+            ]
+          },
+          {
+            "id": "cmp-003",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "cmp-004",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9"
+            ]
+          },
+          {
+            "id": "cmp-005",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p1",
+              "ragas_2023:p4",
+              "beir_2021:p8"
+            ]
+          },
+          {
+            "id": "cmp-006",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.43067655807339306,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p7",
+              "ragas_2023:p4",
+              "ragas_2023:p2"
+            ]
+          },
+          {
+            "id": "cmp-007",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p3",
+              "ragas_2023:p1",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "cmp-008",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p5",
+              "beir_2021:p6",
+              "beir_2021:p13"
+            ]
+          },
+          {
+            "id": "cmp-009",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p22",
+              "beir_2021:p24",
+              "beir_2021:p21"
+            ]
+          },
+          {
+            "id": "cmp-010",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p9",
+              "beir_2021:p24",
+              "beir_2021:p6"
+            ]
+          }
+        ]
+      },
+      "hybrid_rerank": {
+        "label": "Hybrid + cross-encoder reranker",
+        "overall": {
+          "recall@1": 0.65,
+          "recall@3": 0.9125,
+          "recall@5": 0.9625,
+          "mrr@10": 0.8604,
+          "ndcg@5": 0.863,
+          "n": 40,
+          "ci95": {
+            "recall@5": [
+              0.9125,
+              1.0
+            ],
+            "mrr@10": [
+              0.7792,
+              0.925
+            ]
+          }
+        },
+        "by_category": {
+          "fact_retrieval": {
+            "recall@1": 0.7,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.8333,
+            "ndcg@5": 0.8762,
+            "n": 20
+          },
+          "multi_hop": {
+            "recall@1": 0.4,
+            "recall@3": 0.65,
+            "recall@5": 0.85,
+            "mrr@10": 0.875,
+            "ndcg@5": 0.7735,
+            "n": 10
+          },
+          "comparison": {
+            "recall@1": 0.8,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.9,
+            "ndcg@5": 0.9262,
+            "n": 10
+          }
+        },
+        "latency_ms": {
+          "median": 1250.9,
+          "p95": 1681.3,
+          "n": 150
+        },
+        "per_question": [
+          {
+            "id": "fr-001",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-002",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p10"
+            ]
+          },
+          {
+            "id": "fr-003",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.5,
+            "top_pages": [
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p7"
+            ]
+          },
+          {
+            "id": "fr-004",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-005",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p15",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "fr-006",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p13",
+              "oecd_interim_2025_09:p18",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "fr-007",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p14",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p4"
+            ]
+          },
+          {
+            "id": "fr-008",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.3333333333333333,
+            "ndcg@5": 0.5,
+            "top_pages": [
+              "ragas_2023:p1",
+              "ragas_2023:p2",
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "fr-009",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "beir_2021:p4",
+              "beir_2021:p18",
+              "beir_2021:p20"
+            ]
+          },
+          {
+            "id": "fr-010",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "ragas_2023:p4"
+            ]
+          },
+          {
+            "id": "fr-011",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "fr-012",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p4",
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p8",
+              "beir_2021:p8"
+            ]
+          },
+          {
+            "id": "fr-013",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p3",
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "fr-014",
+            "category": "fact_retrieval",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "beir_2021:p4",
+              "beir_2021:p2",
+              "beir_2021:p1",
+              "beir_2021:p5",
+              "beir_2021:p17"
+            ]
+          },
+          {
+            "id": "fr-015",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p5",
+              "beir_2021:p6",
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "fr-016",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p24",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "fr-017",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p8",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "fr-018",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p21",
+              "beir_2021:p4",
+              "beir_2021:p18",
+              "beir_2021:p17"
+            ]
+          },
+          {
+            "id": "fr-019",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p5",
+              "beir_2021:p7",
+              "beir_2021:p17",
+              "beir_2021:p6"
+            ]
+          },
+          {
+            "id": "fr-020",
+            "category": "fact_retrieval",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p2",
+              "beir_2021:p24"
+            ]
+          },
+          {
+            "id": "mh-001",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.8503449055347546,
+            "top_pages": [
+              "oecd_interim_2025_09:p12",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p5",
+              "oecd_interim_2025_09:p17"
+            ]
+          },
+          {
+            "id": "mh-002",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p21",
+              "oecd_interim_2025_09:p19",
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p16",
+              "oecd_interim_2025_09:p24"
+            ]
+          },
+          {
+            "id": "mh-003",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-004",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "oecd_interim_2025_09:p7",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p24",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p6"
+            ]
+          },
+          {
+            "id": "mh-005",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "ragas_2023:p3",
+              "beir_2021:p5"
+            ]
+          },
+          {
+            "id": "mh-006",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p8"
+            ]
+          },
+          {
+            "id": "mh-007",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 0.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.25,
+            "ndcg@5": 0.5012658353418871,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "ragas_2023:p4",
+              "ragas_2023:p3"
+            ]
+          },
+          {
+            "id": "mh-008",
+            "category": "multi_hop",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6934264036172708,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p8",
+              "beir_2021:p5",
+              "beir_2021:p2"
+            ]
+          },
+          {
+            "id": "mh-009",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.8503449055347546,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p9",
+              "beir_2021:p1",
+              "beir_2021:p5",
+              "beir_2021:p24"
+            ]
+          },
+          {
+            "id": "mh-010",
+            "category": "multi_hop",
+            "recall@1": 0.5,
+            "recall@3": 0.5,
+            "recall@5": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@5": 0.6131471927654584,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p8",
+              "beir_2021:p9",
+              "beir_2021:p5",
+              "beir_2021:p22"
+            ]
+          },
+          {
+            "id": "cmp-001",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p5"
+            ]
+          },
+          {
+            "id": "cmp-002",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p22"
+            ]
+          },
+          {
+            "id": "cmp-003",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p8",
+              "oecd_interim_2025_09:p6",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p14"
+            ]
+          },
+          {
+            "id": "cmp-004",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "oecd_interim_2025_09:p22",
+              "oecd_interim_2025_09:p17",
+              "oecd_interim_2025_09:p9",
+              "oecd_interim_2025_09:p23",
+              "oecd_interim_2025_09:p8"
+            ]
+          },
+          {
+            "id": "cmp-005",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p3",
+              "ragas_2023:p2",
+              "ragas_2023:p4",
+              "ragas_2023:p1"
+            ]
+          },
+          {
+            "id": "cmp-006",
+            "category": "comparison",
+            "recall@1": 0.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 0.5,
+            "ndcg@5": 0.6309297535714575,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p4",
+              "ragas_2023:p3",
+              "ragas_2023:p7",
+              "ragas_2023:p8"
+            ]
+          },
+          {
+            "id": "cmp-007",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "ragas_2023:p5",
+              "ragas_2023:p2",
+              "ragas_2023:p1",
+              "beir_2021:p7",
+              "ragas_2023:p4"
+            ]
+          },
+          {
+            "id": "cmp-008",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p8",
+              "beir_2021:p6",
+              "beir_2021:p7",
+              "beir_2021:p9",
+              "beir_2021:p3"
+            ]
+          },
+          {
+            "id": "cmp-009",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p9",
+              "beir_2021:p8",
+              "beir_2021:p7",
+              "beir_2021:p24",
+              "beir_2021:p21"
+            ]
+          },
+          {
+            "id": "cmp-010",
+            "category": "comparison",
+            "recall@1": 1.0,
+            "recall@3": 1.0,
+            "recall@5": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@5": 1.0,
+            "top_pages": [
+              "beir_2021:p7",
+              "beir_2021:p6",
+              "beir_2021:p8",
+              "beir_2021:p9",
+              "beir_2021:p24"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
