@@ -34,3 +34,6 @@ qdrant_data/
 
 # Logs
 *.log
+
+# Evaluation LLM response cache
+.eval_cache/

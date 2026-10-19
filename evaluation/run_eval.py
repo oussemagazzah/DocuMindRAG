@@ -2,8 +2,10 @@
 
     python -m evaluation.run_eval --all          # retrieval ablation + end-to-end
     python -m evaluation.run_eval --retrieval    # retrieval ablation only (no LLM, deterministic)
+    python -m evaluation.run_eval --e2e --judge  # end-to-end answers + LLM-as-judge second opinion
+    python -m evaluation.run_eval --e2e --limit 3  # smoke test, writes nothing
 
-Writes evaluation/results/results.json and evaluation/results/ablation.md.
+Writes evaluation/results/results.json, ablation.md, end_to_end.md and manual_review.md.
 Sections not re-run are kept from the existing results.json.
 """
 
@@ -13,6 +15,13 @@ import os
 # against a fresh in-process Qdrant, never a server with user documents in it.
 os.environ["QDRANT_LOCATION"] = ":memory:"
 os.environ["COLLECTION_NAME"] = "documind_eval"
+# The reported numbers use one fixed LLM configuration, regardless of the local .env.
+GENERATOR_MODEL = "gemini-3.5-flash"
+# gemini-3.8-flash timed out (504) on 2026-10-19; Gemma 4 ignored the JSON format.
+JUDGE_MODEL = "gemini-3.1-flash-lite"
+os.environ["GEMINI_MODEL"] = GENERATOR_MODEL
+os.environ["GEMINI_TEMPERATURE"] = "0.0"
+os.environ["GEMINI_MAX_OUTPUT_TOKENS"] = "1024"
 
 import argparse  # noqa: E402
 import json  # noqa: E402
@@ -150,6 +159,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--all", action="store_true", help="run retrieval ablation and end-to-end evaluation")
     parser.add_argument("--retrieval", action="store_true", help="run the retrieval ablation")
     parser.add_argument("--e2e", action="store_true", help="run the end-to-end answer evaluation (needs GEMINI_API_KEY)")
+    parser.add_argument("--judge", action="store_true", help=f"add LLM-as-judge faithfulness ({JUDGE_MODEL}); implied by --all")
+    parser.add_argument("--limit", type=int, help="e2e smoke test on the first N questions; writes no files")
+    parser.add_argument("--min-interval", type=float, default=6.5, help="seconds between LLM calls (free-tier rate limit)")
+    parser.add_argument("--no-cache", action="store_true", help="ignore cached LLM responses in .eval_cache/")
     parser.add_argument("--repeats", type=int, default=3, help="latency passes over all questions")
     args = parser.parse_args(argv)
     if not (args.all or args.retrieval or args.e2e):
@@ -160,6 +173,11 @@ def main(argv: list[str] | None = None) -> int:
     if errors:
         print("Benchmark check failed:\n  " + "\n  ".join(errors))
         return 1
+
+    if args.limit:
+        if args.all or args.retrieval:
+            parser.error("--limit only applies to --e2e")
+        benchmark = benchmark | {"questions": benchmark["questions"][: args.limit]}
 
     _seed_everything()
     from evaluation.retrieval_eval import ablation_markdown, build_index, run_ablation
@@ -179,16 +197,26 @@ def main(argv: list[str] | None = None) -> int:
         (RESULTS_DIR / "ablation.md").write_text(ablation_markdown(results["retrieval"]["configs"], env), encoding="utf-8")
 
     if args.all or args.e2e:
-        from evaluation.e2e_eval import run_e2e
+        from evaluation.e2e_eval import e2e_markdown, manual_review_markdown, run_e2e
 
         print("Running end-to-end evaluation...", flush=True)
-        results["end_to_end"] = run_e2e(benchmark, env)
+        e2e = run_e2e(benchmark, env, JUDGE_MODEL if (args.all or args.judge) else None,
+                      min_interval_s=args.min_interval, use_cache=not args.no_cache)
+        if args.limit:
+            print(json.dumps(e2e["overall"], indent=2))
+            return 0
+        results["end_to_end"] = e2e
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        (RESULTS_DIR / "end_to_end.md").write_text(e2e_markdown(e2e), encoding="utf-8")
+        (RESULTS_DIR / "manual_review.md").write_text(manual_review_markdown(e2e, benchmark), encoding="utf-8")
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     results_path.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Wrote {results_path.relative_to(ROOT)}")
-    if "retrieval" in results:
+    if args.all or args.retrieval:
         print((RESULTS_DIR / "ablation.md").read_text(encoding="utf-8"))
+    if args.all or args.e2e:
+        print((RESULTS_DIR / "end_to_end.md").read_text(encoding="utf-8"))
     return 0
 
 
