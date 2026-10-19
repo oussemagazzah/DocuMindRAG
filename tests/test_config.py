@@ -7,7 +7,7 @@ from app.config import Settings, get_settings
 
 
 def test_settings_defaults():
-    s = Settings()
+    s = Settings(_env_file=None)
     assert s.qdrant_host == "localhost"
     assert s.qdrant_port == 6333
     assert s.embedding_model == "all-MiniLM-L6-v2"
@@ -25,8 +25,10 @@ def test_settings_env_override():
 
 
 def test_settings_gemini_defaults():
-    s = Settings()
-    assert s.gemini_model == "gemini-2.0-flash"
+    # Ignore the developer's .env so the test checks the code defaults.
+    s = Settings(_env_file=None)
+    assert s.gemini_model == "gemini-3.5-flash"
+    assert s.gemini_temperature == 0.0
     assert s.ollama_model == "qwen2.5:0.5b"
 
 

@@ -97,3 +97,17 @@ def test_hedging_phrases():
     assert _check_hedging("I don't have enough information", []) is True
     assert _check_hedging("cannot determine from the text", []) is True
     assert _check_hedging("The answer is clear", []) is False
+
+
+def test_extract_cited_pages_handles_multi_page_citations():
+    from app.retrieval.groundedness import extract_cited_pages
+
+    answer = "Growth is 2.9% [p.6]. Tariffs rose [p.6, p.12] and [p.3; 5]. Also [P. 7]."
+    assert extract_cited_pages(answer) == [6, 6, 12, 3, 5, 7]
+    assert extract_cited_pages("no citations [1] here") == []
+
+
+def test_multi_page_citation_counts_for_precision():
+    answer = "Revenue grew [p.1, p.2]."
+    results = [_make_result(1), _make_result(2)]
+    assert _check_citation_precision(answer, results) == 1.0

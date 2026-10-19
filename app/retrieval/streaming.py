@@ -60,8 +60,8 @@ async def _stream_gemini(user_message: str) -> AsyncGenerator[str, None]:
     response = model.generate_content(
         user_message,
         generation_config=genai.GenerationConfig(
-            temperature=0.1,
-            max_output_tokens=1024,
+            temperature=settings.gemini_temperature,
+            max_output_tokens=settings.gemini_max_output_tokens,
         ),
         stream=True,
     )

@@ -22,7 +22,9 @@ class Settings(BaseSettings):
 
     # LLM (Gemini)
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-3.5-flash"
+    gemini_temperature: float = 0.0
+    gemini_max_output_tokens: int = 1024
 
     # LLM (Ollama)
     ollama_base_url: str = "http://localhost:11434"
