@@ -5,8 +5,8 @@
   },
   "retrieval": {
     "environment": {
-      "generated_at": "2026-10-19 16:59 UTC",
-      "git_commit": "fb92bbd",
+      "generated_at": "2026-10-19 20:37 UTC",
+      "git_commit": "da18eb7",
       "seed": 0,
       "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
       "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
@@ -99,8 +99,8 @@
           }
         },
         "latency_ms": {
-          "median": 16.4,
-          "p95": 29.3,
+          "median": 17.8,
+          "p95": 21.5,
           "n": 150
         },
         "per_question": [
@@ -793,8 +793,8 @@
           }
         },
         "latency_ms": {
-          "median": 5.8,
-          "p95": 9.2,
+          "median": 5.3,
+          "p95": 7.4,
           "n": 150
         },
         "per_question": [
@@ -1487,8 +1487,8 @@
           }
         },
         "latency_ms": {
-          "median": 21.8,
-          "p95": 27.2,
+          "median": 26.3,
+          "p95": 32.3,
           "n": 150
         },
         "per_question": [
@@ -2181,8 +2181,8 @@
           }
         },
         "latency_ms": {
-          "median": 1250.9,
-          "p95": 1681.3,
+          "median": 1688.7,
+          "p95": 1862.3,
           "n": 150
         },
         "per_question": [

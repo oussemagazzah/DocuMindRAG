@@ -4,10 +4,10 @@ Benchmark: 40 answerable questions (unanswerable ones have no gold pages) over 5
 
 | Configuration | Recall@1 | Recall@3 | Recall@5 | MRR@10 | nDCG@5 | Median latency | p95 latency |
 |---|---|---|---|---|---|---|---|
-| Dense only (all-MiniLM-L6-v2) | 0.537 | 0.725 | 0.863 | 0.721 | 0.735 | 16 ms | 29 ms |
-| Sparse only (BM25) | 0.688 | 0.925 | 0.963 | 0.880 | 0.885 | 6 ms | 9 ms |
-| Hybrid (dense + BM25, RRF k=60) | 0.650 | 0.812 | 0.912 | 0.838 | 0.827 | 22 ms | 27 ms |
-| Hybrid + cross-encoder reranker | 0.650 | 0.912 | 0.963 | 0.860 | 0.863 | 1251 ms | 1681 ms |
+| Dense only (all-MiniLM-L6-v2) | 0.537 | 0.725 | 0.863 | 0.721 | 0.735 | 18 ms | 22 ms |
+| Sparse only (BM25) | 0.688 | 0.925 | 0.963 | 0.880 | 0.885 | 5 ms | 7 ms |
+| Hybrid (dense + BM25, RRF k=60) | 0.650 | 0.812 | 0.912 | 0.838 | 0.827 | 26 ms | 32 ms |
+| Hybrid + cross-encoder reranker | 0.650 | 0.912 | 0.963 | 0.860 | 0.863 | 1689 ms | 1862 ms |
 
 95% bootstrap intervals (2,000 resamples of the questions, seed 0). With n=40, one question moves Recall by 0.025, so configurations whose intervals overlap are not reliably different on this benchmark.
 
@@ -35,4 +35,4 @@ Benchmark: 40 answerable questions (unanswerable ones have no gold pages) over 5
 - Vector store: Qdrant local in-memory mode (qdrant-client 1.12.1), exact search
 - Latency: wall time per query inside the retrieval call, after warm-up; 150 samples per configuration (3 passes over all 50 questions)
 - Hardware: 11th Gen Intel(R) Core(TM) i5-11400F @ 2.60GHz, 12 logical cores, 15.8 GB RAM, device `cpu`, torch 2.13.0+cpu (6 threads), Python 3.13.1, Windows 11
-- Generated 2026-10-19 16:59 UTC by `python -m evaluation.run_eval --retrieval` at commit `fb92bbd`
+- Generated 2026-10-19 20:37 UTC by `python -m evaluation.run_eval --retrieval` at commit `da18eb7`
