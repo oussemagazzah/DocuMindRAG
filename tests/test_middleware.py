@@ -1,9 +1,9 @@
 """Tests for rate limiting and API key middleware."""
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.middleware import RateLimitMiddleware, APIKeyMiddleware
+from app.middleware import APIKeyMiddleware, RateLimitMiddleware
 
 
 def test_rate_limit_allows_normal_requests():
@@ -71,7 +71,7 @@ def test_api_key_middleware_health_bypasses():
 
 
 def test_middleware_import():
-    from app.middleware import RateLimitMiddleware, APIKeyMiddleware
+    from app.middleware import APIKeyMiddleware, RateLimitMiddleware
     assert RateLimitMiddleware is not None
     assert APIKeyMiddleware is not None
 

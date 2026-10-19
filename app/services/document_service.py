@@ -6,13 +6,15 @@ from pathlib import Path
 
 from app.config import get_settings
 from app.db import (
+    create_chunks,
     create_document,
     create_document_error,
-    create_chunks,
-    list_documents,
     get_document,
-    delete_document as db_delete_document,
+    list_documents,
     log_query,
+)
+from app.db import (
+    delete_document as db_delete_document,
 )
 from app.errors import (
     DocumentNotFoundError,
@@ -21,30 +23,30 @@ from app.errors import (
     QueryError,
     VectorStoreError,
 )
-from app.ingestion.pdf_parser import extract_pages
 from app.ingestion.chunker import chunk_pages
 from app.ingestion.embedder import (
-    embed_chunks,
-    upsert_chunks,
     delete_document_vectors,
-    get_qdrant_client,
+    embed_chunks,
     ensure_collection,
+    get_qdrant_client,
+    upsert_chunks,
 )
+from app.ingestion.pdf_parser import extract_pages
 from app.logging_config import get_logger
 from app.models import (
-    UploadResponse,
-    DocumentInfo,
+    Citation,
     DeleteResponse,
+    DocumentInfo,
+    DocumentStatus,
+    GroundednessScore,
     QueryRequest,
     QueryResponse,
-    Citation,
-    GroundednessScore,
-    DocumentStatus,
+    UploadResponse,
 )
-from app.retrieval.search import hybrid_search
-from app.retrieval.reranker import rerank
-from app.retrieval.answer import generate_answer, extract_citations
+from app.retrieval.answer import extract_citations, generate_answer
 from app.retrieval.groundedness import compute_groundedness
+from app.retrieval.reranker import rerank
+from app.retrieval.search import hybrid_search
 from app.services.llm_budget import DailyBudget
 
 settings = get_settings()
@@ -80,7 +82,7 @@ async def ingest_pdf_async(file_bytes: bytes, filename: str) -> UploadResponse:
         raise
     except Exception as e:
         logger.error(f"PDF parsing failed: {e}")
-        raise IngestionError(f"Failed to parse PDF: {type(e).__name__}")
+        raise IngestionError(f"Failed to parse PDF: {type(e).__name__}") from e
 
     pages = result["pages"]
     chunks = result["chunks"]
@@ -104,7 +106,7 @@ async def ingest_pdf_async(file_bytes: bytes, filename: str) -> UploadResponse:
     except Exception as e:
         logger.error(f"Embedding/upsert failed for {doc_id}: {e}")
         await create_document_error(filename, str(e))
-        raise VectorStoreError(str(e))
+        raise VectorStoreError(str(e)) from e
 
     logger.info(f"Ingestion complete: {doc_id} ({len(pages)} pages, {len(chunks)} chunks)")
     return UploadResponse(
@@ -161,7 +163,7 @@ async def _run_retrieval(request: QueryRequest) -> list:
         results = await asyncio.to_thread(hybrid_search, request.query, doc_ids)
     except Exception as e:
         logger.error(f"Search failed: {e}")
-        raise QueryError(f"Search failed: {type(e).__name__}")
+        raise QueryError(f"Search failed: {type(e).__name__}") from e
 
     if not results:
         raise QueryError("No matching content found in the documents")

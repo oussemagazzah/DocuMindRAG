@@ -1,11 +1,9 @@
 """Tests for groundedness scoring module."""
 
 from app.retrieval.groundedness import (
-    compute_groundedness,
     _check_citation_precision,
-    _check_context_coverage,
     _check_hedging,
-    GroundednessResult,
+    compute_groundedness,
 )
 from app.retrieval.search import SearchResult
 

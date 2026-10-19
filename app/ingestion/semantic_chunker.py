@@ -4,8 +4,8 @@ import re
 from dataclasses import dataclass
 
 from app.config import get_settings
-from app.logging_config import get_logger
 from app.ingestion.pdf_parser import PageContent
+from app.logging_config import get_logger
 
 settings = get_settings()
 logger = get_logger("chunker")

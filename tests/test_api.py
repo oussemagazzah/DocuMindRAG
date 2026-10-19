@@ -1,13 +1,14 @@
 """Integration tests for API endpoints."""
 
-import io
 import asyncio
+import io
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, AsyncMock, MagicMock
 from fastapi.testclient import TestClient
 
-from app.main import app
 from app.db import init_db
+from app.main import app
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -61,7 +62,6 @@ def test_upload_rejects_invalid_pdf_header():
 def test_upload_rejects_oversized_file():
     # Test with content that exceeds limit (51MB)
     # Using a smaller mock to avoid slow memory allocation
-    from unittest.mock import patch
     with patch("app.main.settings") as mock_settings:
         mock_settings.max_upload_size_mb = 0  # 0MB limit = reject everything
         mock_settings.demo_mode = False

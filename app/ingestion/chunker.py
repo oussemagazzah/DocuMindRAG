@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from app.ingestion.pdf_parser import PageContent
+
 from app.config import get_settings
+from app.ingestion.pdf_parser import PageContent
 
 settings = get_settings()
 
@@ -63,11 +64,9 @@ def _assign_pages(chunks: list[Chunk], spans: list[tuple[int, int, int]]) -> Non
 def chunk_pages(pages: list[PageContent]) -> list[Chunk]:
     chunk_size = settings.chunk_size_tokens
     overlap = settings.chunk_overlap_tokens
-    max_chunk_size = settings.max_chunk_size_tokens
 
     all_chunks: list[Chunk] = []
     buffer_text = ""
-    buffer_start = 0
     buffer_page = 1
     buffer_page_count = 0
     buffer_spans: list[tuple[int, int, int]] = []  # (start, end, page_number) within buffer_text
@@ -80,7 +79,6 @@ def chunk_pages(pages: list[PageContent]) -> list[Chunk]:
         if buffer_text:
             buffer_text += "\n\n"
         else:
-            buffer_start = 0
             buffer_page = page.page_number
             buffer_spans = []
         buffer_spans.append((len(buffer_text), len(buffer_text) + len(page_text), page.page_number))
@@ -97,7 +95,6 @@ def chunk_pages(pages: list[PageContent]) -> list[Chunk]:
                 all_chunks.append(sc)
 
             buffer_text = ""
-            buffer_start = 0
             buffer_page_count = 0
 
     if buffer_text.strip():

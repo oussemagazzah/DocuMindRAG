@@ -32,7 +32,7 @@ def rerank(query: str, results: list[SearchResult], top_k: int | None = None) ->
     logger.info(f"Reranking {len(pairs)} results")
     scores = model.predict(pairs)
 
-    for result, score in zip(results, scores):
+    for result, score in zip(results, scores, strict=True):
         result.score = float(score)
         result.source = "reranked"
 

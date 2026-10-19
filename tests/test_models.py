@@ -4,14 +4,13 @@ import pytest
 from pydantic import ValidationError
 
 from app.models import (
-    QueryRequest,
-    QueryResponse,
-    UploadResponse,
-    DocumentInfo,
-    DeleteResponse,
-    HealthResponse,
     Citation,
+    DeleteResponse,
+    DocumentInfo,
     DocumentStatus,
+    HealthResponse,
+    QueryRequest,
+    UploadResponse,
 )
 
 

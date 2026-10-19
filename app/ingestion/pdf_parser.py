@@ -1,6 +1,6 @@
-import fitz
 from dataclasses import dataclass
 
+import fitz
 
 # Expand ligatures ("ﬁ" -> "fi") and join words hyphenated across line breaks,
 # so lexical search and answer checks see the words as written.

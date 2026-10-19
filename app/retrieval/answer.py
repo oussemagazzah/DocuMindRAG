@@ -74,7 +74,7 @@ def generate_answer(query: str, results: list[SearchResult]) -> tuple[str, str]:
         return answer, settings.ollama_model
     except Exception as e:
         logger.error(f"Ollama also failed: {type(e).__name__}: {e}")
-        raise LLMError()
+        raise LLMError() from e
 
 
 def gemini_response(user_message: str):

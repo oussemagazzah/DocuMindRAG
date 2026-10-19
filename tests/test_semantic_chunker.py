@@ -1,11 +1,11 @@
 """Tests for semantic chunker module."""
 
-from app.ingestion.semantic_chunker import (
-    chunk_pages_semantic,
-    _split_into_sentences,
-    _estimate_tokens,
-)
 from app.ingestion.pdf_parser import PageContent
+from app.ingestion.semantic_chunker import (
+    _estimate_tokens,
+    _split_into_sentences,
+    chunk_pages_semantic,
+)
 
 
 def test_split_into_sentences():

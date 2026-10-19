@@ -1,9 +1,11 @@
 """Tests for answer generation and citation extraction."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
+import pytest
+
+from app.retrieval.answer import SYSTEM_PROMPT, _format_context, extract_citations
 from app.retrieval.search import SearchResult
-from app.retrieval.answer import extract_citations, _format_context, SYSTEM_PROMPT
 
 
 def _make_result(page: int = 1, doc_id: str = "doc1", text: str = "test text") -> SearchResult:
@@ -101,8 +103,5 @@ def test_generate_answer_falls_back_to_ollama(mock_gemini):
 def test_generate_answer_raises_llm_error_when_all_fail(mock_gem, mock_oll):
     from app.errors import LLMError
     from app.retrieval.answer import generate_answer
-    try:
+    with pytest.raises(LLMError):
         generate_answer("test", [_make_result()])
-        assert False, "Should have raised LLMError"
-    except LLMError:
-        pass

@@ -7,10 +7,9 @@ import google.generativeai as genai
 import ollama as ollama_client
 
 from app.config import get_settings
-from app.errors import LLMError
 from app.logging_config import get_logger
+from app.retrieval.answer import SYSTEM_PROMPT, _format_context
 from app.retrieval.search import SearchResult
-from app.retrieval.answer import _format_context, SYSTEM_PROMPT
 
 settings = get_settings()
 logger = get_logger("streaming")

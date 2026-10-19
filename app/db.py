@@ -2,7 +2,7 @@
 
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, Any
+from typing import Optional
 
 from app.config import get_settings
 from app.logging_config import get_logger
@@ -114,10 +114,8 @@ CREATE INDEX IF NOT EXISTS idx_feedback_query_log ON feedback(query_log_id);
 def _get_db():
     """Get a database connection — returns either aiosqlite or asyncpg."""
     if settings.use_postgres:
-        import asyncpg
         return asyncpg_connection()
     else:
-        import aiosqlite
         return aiosqlite_connection()
 
 
@@ -125,7 +123,6 @@ class aiosqlite_connection:
     """Wrapper around aiosqlite to match asyncpg-like interface."""
 
     def __init__(self):
-        import aiosqlite
         self._db = None
         self._conn_str = settings.database_path
 

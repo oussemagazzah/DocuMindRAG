@@ -1,7 +1,7 @@
 """Tests for chunker module."""
 
+from app.ingestion.chunker import Chunk, _estimate_tokens, chunk_pages
 from app.ingestion.pdf_parser import PageContent
-from app.ingestion.chunker import chunk_pages, Chunk, _estimate_tokens
 
 
 def test_estimate_tokens():

@@ -1,8 +1,9 @@
 """Pydantic models for DocuMindRAG API."""
 
-from pydantic import BaseModel, Field
-from typing import Optional
 from enum import Enum
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class DocumentStatus(str, Enum):

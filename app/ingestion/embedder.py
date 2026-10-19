@@ -1,19 +1,20 @@
 """Embedding generation and Qdrant vector store operations."""
 
-from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
-from qdrant_client.models import (
-    Distance,
-    VectorParams,
-    PointStruct,
-    SparseVector,
-    SparseVectorParams,
-    SparseIndexParams,
-    Modifier,
-)
 import re
 import uuid
 import zlib
+
+from qdrant_client import QdrantClient
+from qdrant_client.models import (
+    Distance,
+    Modifier,
+    PointStruct,
+    SparseIndexParams,
+    SparseVector,
+    SparseVectorParams,
+    VectorParams,
+)
+from sentence_transformers import SentenceTransformer
 
 from app.config import get_settings
 from app.ingestion.chunker import Chunk
@@ -86,7 +87,7 @@ def embed_chunks(chunks: list[Chunk]) -> list[tuple[Chunk, list[float]]]:
     texts = [c.text for c in chunks]
     logger.info(f"Embedding {len(texts)} chunks")
     embeddings = model.encode(texts, show_progress_bar=False)
-    return list(zip(chunks, embeddings.tolist()))
+    return list(zip(chunks, embeddings.tolist(), strict=True))
 
 
 def upsert_chunks(doc_id: str, embedded_chunks: list[tuple[Chunk, list[float]]]) -> int:
@@ -165,7 +166,7 @@ def build_sparse_query_vector(query: str) -> SparseVector:
 
 
 def delete_document_vectors(doc_id: str):
-    from qdrant_client.models import Filter, FieldCondition, MatchValue
+    from qdrant_client.models import FieldCondition, Filter, MatchValue
 
     client = get_qdrant_client()
     client.delete(

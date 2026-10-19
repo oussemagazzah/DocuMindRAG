@@ -1,10 +1,11 @@
 """Hybrid search combining dense and sparse retrieval with RRF fusion."""
 
 from dataclasses import dataclass
-from qdrant_client.models import Filter, FieldCondition, MatchAny
+
+from qdrant_client.models import FieldCondition, Filter, MatchAny
 
 from app.config import get_settings
-from app.ingestion.embedder import get_embedding_model, get_qdrant_client, build_sparse_query_vector
+from app.ingestion.embedder import build_sparse_query_vector, get_embedding_model, get_qdrant_client
 from app.logging_config import get_logger
 
 settings = get_settings()
