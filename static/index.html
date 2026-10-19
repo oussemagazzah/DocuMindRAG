@@ -27,7 +27,13 @@
             </div>
 
             <div class="sidebar-content">
-                <div class="section">
+                <div class="section demo-notice" id="demoNotice">
+                    <h3 class="section-title">Public demo</h3>
+                    <p class="upload-hint">Read-only, with three preloaded public PDFs (BEIR, Ragas, OECD Interim
+                        Economic Outlook Sept 2025). <span id="llmLeft"></span></p>
+                </div>
+
+                <div class="section upload-section">
                     <h3 class="section-title">Upload Document</h3>
                     <div class="upload-zone" id="uploadZone">
                         <input type="file" id="fileInput" accept=".pdf" hidden>
@@ -85,7 +91,7 @@
             <div class="query-section">
                 <div class="input-group">
                     <label for="queryInput" class="sr-only">Ask a question</label>
-                    <textarea id="queryInput" placeholder="What was the revenue in 2025?" rows="2"></textarea>
+                    <textarea id="queryInput" placeholder="e.g. What global GDP growth does the OECD project for 2026?" rows="2"></textarea>
                     <button class="btn-primary" id="queryBtn" aria-label="Submit query">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         Ask

@@ -64,6 +64,7 @@ def test_upload_rejects_oversized_file():
     from unittest.mock import patch
     with patch("app.main.settings") as mock_settings:
         mock_settings.max_upload_size_mb = 0  # 0MB limit = reject everything
+        mock_settings.demo_mode = False
         mock_settings.gemini_api_key = ""
         resp = client.post(
             "/upload",

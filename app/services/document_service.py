@@ -2,7 +2,9 @@
 
 import asyncio
 import time
+from pathlib import Path
 
+from app.config import get_settings
 from app.db import (
     create_document,
     create_document_error,
@@ -15,6 +17,7 @@ from app.db import (
 from app.errors import (
     DocumentNotFoundError,
     IngestionError,
+    LLMError,
     QueryError,
     VectorStoreError,
 )
@@ -42,8 +45,16 @@ from app.retrieval.search import hybrid_search
 from app.retrieval.reranker import rerank
 from app.retrieval.answer import generate_answer, extract_citations
 from app.retrieval.groundedness import compute_groundedness
+from app.services.llm_budget import DailyBudget
 
+settings = get_settings()
 logger = get_logger("service")
+llm_budget = DailyBudget(settings.llm_daily_limit)
+
+RETRIEVAL_ONLY_NOTICE = (
+    "No answer was generated: the demo's daily LLM quota is used up or the LLM is unavailable. "
+    "The passages below are the top results of hybrid search + cross-encoder reranking for your question."
+)
 
 
 def _sync_ingest(file_bytes: bytes, filename: str) -> dict:
@@ -164,27 +175,71 @@ async def _run_retrieval(request: QueryRequest) -> list:
     return reranked
 
 
+async def _generate_or_fallback(query: str, reranked: list) -> tuple[str, str, bool]:
+    """Generate an answer, or fall back to retrieval-only when the daily budget is spent
+    (or, in demo mode, when no LLM is reachable). Returns (text, model_used, generated)."""
+    if not llm_budget.try_consume():
+        logger.warning("Daily LLM limit reached; returning retrieval-only response")
+        return RETRIEVAL_ONLY_NOTICE, "none (daily LLM limit reached)", False
+    try:
+        answer_text, model_used = await asyncio.to_thread(generate_answer, query, reranked)
+        return answer_text, model_used, True
+    except LLMError:
+        if not settings.demo_mode:
+            raise
+        logger.error("LLM unavailable in demo mode; returning retrieval-only response")
+        return RETRIEVAL_ONLY_NOTICE, "none (LLM unavailable)", False
+
+
+async def preload_documents(directory: str) -> int:
+    """Ingest every PDF in `directory` that is not already indexed. Returns how many were ingested.
+
+    With in-memory Qdrant the vectors vanish on restart while a persisted SQLite file
+    may not, so documents recorded in the DB but missing from Qdrant are re-ingested.
+    """
+    pdfs = sorted(Path(directory).glob("*.pdf"))
+    client = get_qdrant_client()
+    ensure_collection(client)
+    have_vectors = client.count(settings.collection_name).count > 0
+
+    loaded = 0
+    for doc in await list_documents():
+        if doc["name"] in {p.name for p in pdfs} and not have_vectors:
+            await db_delete_document(doc["id"])
+    existing = {d["name"] for d in await list_documents() if d["status"] == "ready"}
+    for pdf in pdfs:
+        if pdf.name in existing:
+            continue
+        await ingest_pdf_async(pdf.read_bytes(), pdf.name)
+        loaded += 1
+    logger.info(f"Preloaded {loaded} document(s) from {directory}")
+    return loaded
+
+
 async def query_documents(request: QueryRequest) -> QueryResponse:
     start = time.time()
 
     reranked = await _run_retrieval(request)
-
-    try:
-        answer_text, model_used = await asyncio.to_thread(generate_answer, request.query, reranked)
-    except Exception as e:
-        logger.error(f"Answer generation failed: {e}")
-        raise
+    answer_text, model_used, generated = await _generate_or_fallback(request.query, reranked)
 
     citations = extract_citations(answer_text, reranked)
+    names = {d["id"]: d["name"] for d in await list_documents()}
+    for c in citations:
+        c["doc_name"] = names.get(c["doc_id"], "")
 
-    groundedness = await asyncio.to_thread(compute_groundedness, answer_text, reranked)
-    groundedness_model = GroundednessScore(
-        score=groundedness.score,
-        citation_precision=groundedness.citation_precision,
-        context_coverage=groundedness.context_coverage,
-        has_hedging=groundedness.has_hedging,
-        verdict=groundedness.verdict,
-    )
+    if generated:
+        groundedness = await asyncio.to_thread(compute_groundedness, answer_text, reranked)
+        groundedness_model = GroundednessScore(
+            score=groundedness.score,
+            citation_precision=groundedness.citation_precision,
+            context_coverage=groundedness.context_coverage,
+            has_hedging=groundedness.has_hedging,
+            verdict=groundedness.verdict,
+        )
+    else:
+        groundedness_model = GroundednessScore(
+            score=0.0, citation_precision=0.0, context_coverage=0.0, has_hedging=False, verdict="not_applicable"
+        )
 
     elapsed_ms = (time.time() - start) * 1000
     logger.info(

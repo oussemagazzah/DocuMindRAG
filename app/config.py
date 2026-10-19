@@ -60,6 +60,13 @@ class Settings(BaseSettings):
     rate_limit_per_minute: int = 30
     api_key_header: str = "X-API-Key"
     api_keys: str = ""
+    # Behind a reverse proxy (Hugging Face Spaces), rate-limit by X-Forwarded-For.
+    trust_proxy_headers: bool = False
+
+    # Public demo: read-only, preloaded documents, capped LLM usage
+    demo_mode: bool = False
+    preload_dir: str = ""
+    llm_daily_limit: int = 0  # 0 = unlimited; counts Gemini calls per UTC day
 
     # App
     app_host: str = "0.0.0.0"

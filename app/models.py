@@ -27,7 +27,7 @@ class GroundednessScore(BaseModel):
     citation_precision: float = Field(..., ge=0.0, le=1.0)
     context_coverage: float = Field(..., ge=0.0, le=1.0)
     has_hedging: bool
-    verdict: str = Field(..., pattern="^(grounded|partially_grounded|ungrounded)$")
+    verdict: str = Field(..., pattern="^(grounded|partially_grounded|ungrounded|not_applicable)$")
 
 
 class QueryRequest(BaseModel):
@@ -71,6 +71,8 @@ class HealthResponse(BaseModel):
     status: str = "ok"
     qdrant: str = "connected"
     version: str = "0.1.0"
+    demo_mode: bool = False
+    llm_calls_left_today: int | None = None
 
 
 class FeedbackRequest(BaseModel):

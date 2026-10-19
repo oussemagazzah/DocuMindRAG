@@ -1006,3 +1006,10 @@ body {
     background: #CBD5E1;
     border-radius: 3px;
 }
+
+/* Public demo: read-only */
+.demo-notice { display: none; }
+body.demo .demo-notice { display: block; }
+body.demo .upload-section,
+body.demo .doc-delete,
+body.demo #evalBtn { display: none; }
