@@ -17,7 +17,7 @@ from app.retrieval.search import hybrid_search
 from evaluation.answer_metrics import aggregate, citation_precision, heuristic_vs_judge, is_refusal
 from evaluation.facts import fact_in, fact_recall
 from evaluation.judge import judge_answer
-from evaluation.llm_client import GeminiClient
+from evaluation.llm_client import GeminiClient, QuotaExhausted
 from evaluation.retrieval_metrics import question_metrics
 
 settings = get_settings()
@@ -38,6 +38,8 @@ def evaluate_question(client: GeminiClient, q: dict, judge_model: str | None) ->
         llm = client.generate(settings.gemini_model, SYSTEM_PROMPT, build_user_message(q["question"], context),
                               temperature=settings.gemini_temperature,
                               max_output_tokens=settings.gemini_max_output_tokens)
+    except QuotaExhausted:
+        raise
     except RuntimeError as e:
         return row | {"error": str(e)}
 
@@ -102,6 +104,8 @@ def run_e2e(benchmark: dict, env: dict, judge_model: str | None, min_interval_s:
             "pipeline": f"hybrid (dense+BM25, RRF k={settings.rrf_k}, {settings.dense_top_k} candidates) -> "
                         f"cross-encoder rerank -> top {settings.rerank_top_k} chunks -> LLM",
             "generator_model": settings.gemini_model,
+            "generator_model_note": "Google's quota metadata on 2026-10-19 reported this name being served as "
+                                    "gemini-3.6-flash: the API name is an alias, not a frozen checkpoint.",
             "temperature": settings.gemini_temperature,
             "max_output_tokens": settings.gemini_max_output_tokens,
             "judge_model": judge_model,

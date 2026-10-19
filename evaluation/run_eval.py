@@ -198,10 +198,16 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.all or args.e2e:
         from evaluation.e2e_eval import e2e_markdown, manual_review_markdown, run_e2e
+        from evaluation.llm_client import QuotaExhausted
 
         print("Running end-to-end evaluation...", flush=True)
-        e2e = run_e2e(benchmark, env, JUDGE_MODEL if (args.all or args.judge) else None,
-                      min_interval_s=args.min_interval, use_cache=not args.no_cache)
+        try:
+            e2e = run_e2e(benchmark, env, JUDGE_MODEL if (args.all or args.judge) else None,
+                          min_interval_s=args.min_interval, use_cache=not args.no_cache)
+        except QuotaExhausted as e:
+            print(f"\nStopped: {e}.\nNo results were written. Answers obtained so far are cached in "
+                  ".eval_cache/ and are reused when you re-run the same command.")
+            return 2
         if args.limit:
             print(json.dumps(e2e["overall"], indent=2))
             return 0

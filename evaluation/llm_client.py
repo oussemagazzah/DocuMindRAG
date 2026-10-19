@@ -27,6 +27,10 @@ RETRYABLE = (gexc.ResourceExhausted, gexc.ServiceUnavailable, gexc.InternalServe
              gexc.DeadlineExceeded, gexc.TooManyRequests)
 
 
+class QuotaExhausted(RuntimeError):
+    """The API asked us to wait longer than the call budget (e.g. the free tier's daily limit)."""
+
+
 @dataclass
 class LLMResult:
     text: str
@@ -80,6 +84,8 @@ class GeminiClient:
                 response = future.result(timeout=self.attempt_timeout_s + 5)
             except (*RETRYABLE, FutureTimeout) as e:
                 delay = _retry_delay(e, attempt)
+                if isinstance(e, gexc.ResourceExhausted) and delay > self.call_budget_s:
+                    raise QuotaExhausted(f"{model}: quota exhausted, API says retry in {delay / 3600:.1f} h") from e
                 if time.monotonic() + delay > deadline:
                     break
                 print(f"    {model}: {type(e).__name__} on attempt {attempt}, retrying in {delay:.0f}s", flush=True)
@@ -106,7 +112,7 @@ class GeminiClient:
 
 
 def _retry_delay(error: Exception, attempt: int) -> float:
-    match = re.search(r"retry in ([\d.]+)s|seconds: (\d+)", str(error))
+    match = re.search(r"retry_delay \{\s*seconds: (\d+)", str(error))
     if match:
-        return float(match.group(1) or match.group(2)) + 2
+        return float(match.group(1)) + 2
     return min(10 * 2 ** (attempt - 1), 120)
