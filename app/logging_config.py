@@ -1,10 +1,10 @@
 """Structured logging configuration for DocuMindRAG."""
 
+import json
 import logging
 import sys
-import json
-from datetime import datetime, timezone
 from contextvars import ContextVar
+from datetime import datetime, timezone
 
 REQUEST_ID: ContextVar[str] = ContextVar("request_id", default="-")
 

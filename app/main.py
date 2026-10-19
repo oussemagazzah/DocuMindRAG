@@ -5,42 +5,40 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, File, Request, Query
+from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
-from app.db import init_db
+from app.db import get_analytics_stats, init_db, save_feedback
 from app.errors import (
     DocuMindError,
+    IngestionError,
     documind_error_handler,
     generic_error_handler,
-    IngestionError,
 )
 from app.logging_config import REQUEST_ID, get_logger, setup_logging
-from app.middleware import RateLimitMiddleware, APIKeyMiddleware
+from app.middleware import APIKeyMiddleware, RateLimitMiddleware
 from app.models import (
-    HealthResponse,
-    UploadResponse,
-    DocumentInfo,
-    DeleteResponse,
-    QueryRequest,
-    QueryResponse,
-    FeedbackRequest,
-    FeedbackResponse,
     AnalyticsResponse,
+    DeleteResponse,
+    DocumentInfo,
+    EvalResult,
     EvalRunRequest,
     EvalRunResponse,
-    EvalResult,
+    FeedbackRequest,
+    FeedbackResponse,
+    HealthResponse,
+    QueryRequest,
+    QueryResponse,
+    UploadResponse,
 )
 from app.services.document_service import (
+    delete_doc,
     ingest_pdf_async,
     list_all_documents,
-    delete_doc,
-    query_documents,
 )
-from app.db import log_query, save_feedback, get_analytics_stats
 
 settings = get_settings()
 logger = get_logger("main")
@@ -53,6 +51,10 @@ async def lifespan(app: FastAPI):
     setup_logging(level=settings.log_level, json_output=settings.app_env == "production")
     logger.info("Starting DocuMindRAG", extra={"extra_data": {"env": settings.app_env}})
     await init_db()
+    if settings.preload_dir:
+        from app.services.document_service import preload_documents
+
+        await preload_documents(settings.preload_dir)
     yield
     logger.info("Shutting down DocuMindRAG")
 
@@ -72,7 +74,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(RateLimitMiddleware, requests_per_minute=settings.rate_limit_per_minute)
+app.add_middleware(
+    RateLimitMiddleware,
+    requests_per_minute=settings.rate_limit_per_minute,
+    trust_proxy_headers=settings.trust_proxy_headers,
+)
 app.add_middleware(APIKeyMiddleware, api_keys=settings.api_keys)
 
 app.add_exception_handler(DocuMindError, documind_error_handler)
@@ -112,24 +118,38 @@ async def serve_frontend():
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
-    from qdrant_client import QdrantClient
+    from app.ingestion.embedder import get_qdrant_client
+    from app.services.document_service import llm_budget
 
     qdrant_status = "disconnected"
     try:
-        client = QdrantClient(
-            host=settings.qdrant_host, port=settings.qdrant_port, timeout=3
-        )
-        client.get_collections()
+        get_qdrant_client().get_collections()
         qdrant_status = "connected"
     except Exception as e:
         logger.warning(f"Qdrant health check failed: {type(e).__name__}")
 
     status = "ok" if qdrant_status == "connected" else "degraded"
-    return HealthResponse(status=status, qdrant=qdrant_status, version=app.version)
+    return HealthResponse(
+        status=status,
+        qdrant=qdrant_status,
+        version=app.version,
+        demo_mode=settings.demo_mode,
+        llm_calls_left_today=llm_budget.remaining(),
+    )
+
+
+def _reject_in_demo(action: str):
+    if settings.demo_mode:
+        raise DocuMindError(
+            message="Disabled in demo",
+            status_code=403,
+            detail=f"{action} is disabled in the public demo. Run the app locally to use it.",
+        )
 
 
 @app.post("/upload", response_model=UploadResponse)
 async def upload_document(file: UploadFile = File(...)):
+    _reject_in_demo("Uploading documents")
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise IngestionError("Only PDF files are supported")
 
@@ -161,6 +181,7 @@ async def list_documents():
 
 @app.delete("/documents/{doc_id}", response_model=DeleteResponse)
 async def delete_document(doc_id: str):
+    _reject_in_demo("Deleting documents")
     return await delete_doc(doc_id)
 
 
@@ -174,8 +195,8 @@ async def query(request: QueryRequest):
 @app.post("/query/stream")
 async def query_stream(request: QueryRequest):
     """Stream answer tokens as Server-Sent Events."""
-    from app.services.document_service import _run_retrieval
     from app.retrieval.streaming import stream_answer
+    from app.services.document_service import _run_retrieval
 
     reranked = await _run_retrieval(request)
 
@@ -203,20 +224,20 @@ async def get_analytics():
 
 @app.post("/eval/run", response_model=EvalRunResponse)
 async def run_evaluation(request: EvalRunRequest):
+    _reject_in_demo("Running the evaluation")
     import asyncio
-    from app.config import get_settings
+
     from app.db import get_document
-    from app.retrieval.search import hybrid_search
-    from app.retrieval.reranker import rerank
-    from app.retrieval.answer import generate_answer, extract_citations
-    from app.retrieval.groundedness import compute_groundedness
     from app.errors import DocumentNotFoundError
+    from app.retrieval.answer import extract_citations, generate_answer
+    from app.retrieval.groundedness import compute_groundedness
+    from app.retrieval.reranker import rerank
+    from app.retrieval.search import hybrid_search
 
     doc = await get_document(request.doc_id)
     if not doc:
         raise DocumentNotFoundError(request.doc_id)
 
-    settings = get_settings()
     eval_queries = [
         "What is the main topic of this document?",
         "What are the key findings or conclusions?",

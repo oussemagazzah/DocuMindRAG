@@ -1,25 +1,32 @@
 {
   "metadata": {
-    "version": "1.0",
-    "description": "DocuMindRAG evaluation benchmark dataset",
-    "created": "2026-08-31",
-    "total_questions": 50
+    "version": "2.0",
+    "description": "DocuMindRAG retrieval and answer-quality benchmark over three public PDFs (see evaluation/sources.md)",
+    "created": "2026-10-19",
+    "total_questions": 50,
+    "page_numbering": "1-based PDF page index as returned by app.ingestion.pdf_parser (not the printed page number)",
+    "evidence_groups": "Each group is one piece of evidence; any page in the group supplies it. Recall@k counts satisfied groups.",
+    "documents": {
+      "oecd_interim_2025_09": "evaluation/corpus/oecd_interim_2025_09.pdf",
+      "ragas_2023": "evaluation/corpus/ragas_2023.pdf",
+      "beir_2021": "evaluation/corpus/beir_2021.pdf"
+    }
   },
   "categories": {
     "fact_retrieval": {
-      "description": "Questions with single correct answer on a specific page",
+      "description": "Single fact stated on one page (or restated on a few)",
       "count": 20
     },
     "multi_hop": {
-      "description": "Questions requiring combining information from multiple chunks",
+      "description": "Needs evidence from two different pages",
       "count": 10
     },
     "comparison": {
-      "description": "Questions comparing entities or concepts within the document",
+      "description": "Compares two entities or values from the documents",
       "count": 10
     },
     "unanswerable": {
-      "description": "Questions whose answers are NOT in the document",
+      "description": "Plausible question whose answer is not in any document",
       "count": 10
     }
   },
@@ -27,146 +34,1178 @@
     {
       "id": "fr-001",
       "category": "fact_retrieval",
-      "question": "What was the total revenue reported for 2025?",
-      "expected_answer_contains": ["$247.3 million", "revenue"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "easy",
+      "question": "What was the estimated overall effective US tariff rate at the end of August 2025?",
+      "expected_answer_contains": [
+        [
+          "19.5%",
+          "19.5 %",
+          "19.5 percent",
+          "19.5 per cent"
+        ]
+      ],
+      "expected_pages": [
+        6,
+        12
+      ],
+      "evidence_groups": [
+        [
+          6,
+          12
+        ]
+      ]
     },
     {
       "id": "fr-002",
       "category": "fact_retrieval",
-      "question": "Who is the CEO of TechVision?",
-      "expected_answer_contains": ["CEO"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "easy",
+      "question": "What global GDP growth rate does the OECD project for 2026?",
+      "expected_answer_contains": [
+        [
+          "2.9%",
+          "2.9 %",
+          "2.9 percent",
+          "2.9 per cent"
+        ]
+      ],
+      "expected_pages": [
+        6,
+        16
+      ],
+      "evidence_groups": [
+        [
+          6,
+          16
+        ]
+      ]
     },
     {
       "id": "fr-003",
       "category": "fact_retrieval",
-      "question": "What is TechVision's core product?",
-      "expected_answer_contains": ["product", "platform"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What GDP growth does the OECD project for India in 2025?",
+      "expected_answer_contains": [
+        [
+          "6.7%",
+          "6.7 %",
+          "6.7 percent",
+          "6.7 per cent"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        17
+      ],
+      "evidence_groups": [
+        [
+          17,
+          7
+        ]
+      ]
     },
     {
       "id": "fr-004",
       "category": "fact_retrieval",
-      "question": "How many enterprise clients does TechVision have?",
-      "expected_answer_contains": ["enterprise"],
-      "expected_pages": [1],
-      "difficulty": "medium"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "By roughly how much have gold spot prices risen since the start of 2025?",
+      "expected_answer_contains": [
+        [
+          "40%",
+          "40 %",
+          "40 percent",
+          "40 per cent"
+        ]
+      ],
+      "expected_pages": [
+        16
+      ],
+      "evidence_groups": [
+        [
+          16
+        ]
+      ]
     },
     {
       "id": "fr-005",
       "category": "fact_retrieval",
-      "question": "What was the year-over-year revenue growth rate?",
-      "expected_answer_contains": ["%", "growth"],
-      "expected_pages": [1],
-      "difficulty": "medium"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What was the total market capitalisation of crypto-assets in September 2025?",
+      "expected_answer_contains": [
+        [
+          "3.9 trillion"
+        ]
+      ],
+      "expected_pages": [
+        19
+      ],
+      "evidence_groups": [
+        [
+          19
+        ]
+      ]
     },
     {
       "id": "fr-006",
       "category": "fact_retrieval",
-      "question": "How many employees does TechVision have?",
-      "expected_answer_contains": ["employees"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "By how much were US tariffs on copper imports raised?",
+      "expected_answer_contains": [
+        [
+          "50 percentage points"
+        ]
+      ],
+      "expected_pages": [
+        12
+      ],
+      "evidence_groups": [
+        [
+          12
+        ]
+      ]
     },
     {
       "id": "fr-007",
       "category": "fact_retrieval",
-      "question": "What was the R&D spending as a percentage of revenue?",
-      "expected_answer_contains": ["%", "R&D", "research"],
-      "expected_pages": [1],
-      "difficulty": "medium"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "What headline inflation rate does the OECD project for Türkiye in 2025?",
+      "expected_answer_contains": [
+        [
+          "33.5"
+        ]
+      ],
+      "expected_pages": [
+        8
+      ],
+      "evidence_groups": [
+        [
+          8
+        ]
+      ]
     },
     {
       "id": "fr-008",
       "category": "fact_retrieval",
-      "question": "What is TechVision's stock ticker symbol?",
-      "expected_answer_contains": ["TVSN"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "ragas_2023",
+      "difficulty": "easy",
+      "question": "Which OpenAI model was used to evaluate all prompts in the Ragas experiments?",
+      "expected_answer_contains": [
+        [
+          "gpt-3.5-turbo-16k"
+        ]
+      ],
+      "expected_pages": [
+        3
+      ],
+      "evidence_groups": [
+        [
+          3
+        ]
+      ]
     },
     {
       "id": "fr-009",
       "category": "fact_retrieval",
-      "question": "When was TechVision founded?",
-      "expected_answer_contains": ["founded", "2018"],
-      "expected_pages": [1],
-      "difficulty": "easy"
+      "doc_id": "ragas_2023",
+      "difficulty": "easy",
+      "question": "How many Wikipedia pages were selected to build the WikiEval dataset?",
+      "expected_answer_contains": [
+        [
+          "50"
+        ]
+      ],
+      "expected_pages": [
+        4
+      ],
+      "evidence_groups": [
+        [
+          4
+        ]
+      ]
     },
     {
       "id": "fr-010",
       "category": "fact_retrieval",
-      "question": "What is the projected revenue for 2026?",
-      "expected_answer_contains": ["$", "2026"],
-      "expected_pages": [1],
-      "difficulty": "medium"
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "Which embedding model does Ragas use to compute answer relevance?",
+      "expected_answer_contains": [
+        [
+          "text-embedding-ada-002"
+        ]
+      ],
+      "expected_pages": [
+        3
+      ],
+      "evidence_groups": [
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "id": "fr-011",
+      "category": "fact_retrieval",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "What accuracy did Ragas achieve for agreement with human annotators on faithfulness?",
+      "expected_answer_contains": [
+        [
+          "0.95"
+        ]
+      ],
+      "expected_pages": [
+        5
+      ],
+      "evidence_groups": [
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "id": "fr-012",
+      "category": "fact_retrieval",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "In what share of cases did the two WikiEval annotators agree on answer relevance?",
+      "expected_answer_contains": [
+        [
+          "90%",
+          "90 %",
+          "90 percent",
+          "90 per cent"
+        ]
+      ],
+      "expected_pages": [
+        4
+      ],
+      "evidence_groups": [
+        [
+          4
+        ]
+      ]
+    },
+    {
+      "id": "fr-013",
+      "category": "fact_retrieval",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "How is the Ragas faithfulness score F computed from the extracted statements?",
+      "expected_answer_contains": [
+        [
+          "supported"
+        ],
+        [
+          "total number of statements"
+        ]
+      ],
+      "expected_pages": [
+        3
+      ],
+      "evidence_groups": [
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "id": "fr-014",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "easy",
+      "question": "How many publicly available datasets does the BEIR benchmark include?",
+      "expected_answer_contains": [
+        [
+          "18"
+        ]
+      ],
+      "expected_pages": [
+        1,
+        2,
+        3
+      ],
+      "evidence_groups": [
+        [
+          1,
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "fr-015",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "Which BM25 parameter values did BEIR use with Anserini?",
+      "expected_answer_contains": [
+        [
+          "k=0.9",
+          "k = 0.9",
+          "k1=0.9",
+          "k1 = 0.9",
+          "0.9"
+        ],
+        [
+          "b=0.4",
+          "b = 0.4",
+          "0.4"
+        ]
+      ],
+      "expected_pages": [
+        5
+      ],
+      "evidence_groups": [
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "id": "fr-016",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "hard",
+      "question": "What nDCG@10 did BM25+CE achieve on TREC-COVID?",
+      "expected_answer_contains": [
+        [
+          "0.757"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        9
+      ],
+      "evidence_groups": [
+        [
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "id": "fr-017",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "What Hole@10 rate did BM25 have on TREC-COVID?",
+      "expected_answer_contains": [
+        [
+          "6.4%",
+          "6.4 %",
+          "6.4 percent"
+        ]
+      ],
+      "expected_pages": [
+        9
+      ],
+      "evidence_groups": [
+        [
+          9
+        ]
+      ]
+    },
+    {
+      "id": "fr-018",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "How many query-document pairs did the BEIR authors annotate in TREC-COVID?",
+      "expected_answer_contains": [
+        [
+          "980"
+        ]
+      ],
+      "expected_pages": [
+        9
+      ],
+      "evidence_groups": [
+        [
+          9
+        ]
+      ]
+    },
+    {
+      "id": "fr-019",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "Which CPU was used to measure retrieval latency in BEIR?",
+      "expected_answer_contains": [
+        [
+          "Xeon Platinum 8168"
+        ]
+      ],
+      "expected_pages": [
+        8
+      ],
+      "evidence_groups": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "id": "fr-020",
+      "category": "fact_retrieval",
+      "doc_id": "beir_2021",
+      "difficulty": "hard",
+      "question": "What CPU retrieval latency does BEIR report for BM25+CE on 1 million DBPedia documents?",
+      "expected_answer_contains": [
+        [
+          "6100ms",
+          "6100 ms",
+          "6,100 ms",
+          "6,100ms",
+          "6.1 s",
+          "6.1 seconds"
+        ]
+      ],
+      "expected_pages": [
+        8
+      ],
+      "evidence_groups": [
+        [
+          8
+        ]
+      ]
     },
     {
       "id": "mh-001",
       "category": "multi_hop",
-      "question": "How does the revenue growth compare to the employee growth?",
-      "expected_answer_contains": ["revenue", "employee"],
-      "expected_pages": [1],
-      "difficulty": "hard"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "Which three G20 countries face the highest increases in bilateral US tariff rates this year, and what 2025 GDP growth does the OECD project for each?",
+      "expected_answer_contains": [
+        [
+          "China"
+        ],
+        [
+          "India"
+        ],
+        [
+          "Brazil"
+        ],
+        [
+          "4.9"
+        ],
+        [
+          "6.7"
+        ],
+        [
+          "2.3"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        12,
+        17
+      ],
+      "evidence_groups": [
+        [
+          12
+        ],
+        [
+          17,
+          7
+        ]
+      ]
     },
     {
       "id": "mh-002",
       "category": "multi_hop",
-      "question": "What is the relationship between R&D investment and product development?",
-      "expected_answer_contains": ["R&D", "product"],
-      "expected_pages": [1],
-      "difficulty": "hard"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "What financial stability risks does the OECD associate with crypto-assets, and what regulatory approach does it recommend for them?",
+      "expected_answer_contains": [
+        [
+          "stablecoin",
+          "stablecoins"
+        ],
+        [
+          "interconnectedness",
+          "interconnections"
+        ],
+        [
+          "international regulatory cooperation",
+          "international cooperation"
+        ]
+      ],
+      "expected_pages": [
+        19,
+        21
+      ],
+      "evidence_groups": [
+        [
+          19
+        ],
+        [
+          21
+        ]
+      ]
     },
     {
       "id": "mh-003",
       "category": "multi_hop",
-      "question": "How do the Q4 results contribute to the annual total?",
-      "expected_answer_contains": ["Q4", "annual", "total"],
-      "expected_pages": [1],
-      "difficulty": "hard"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "How much could the OECD's structural reform package add to average annual GDP growth in advanced and emerging-market G20 economies, and how much more would faster AI adoption add?",
+      "expected_answer_contains": [
+        [
+          "0.2 percentage points",
+          "0.2 percentage point",
+          "0.2"
+        ],
+        [
+          "0.8 percentage points",
+          "0.8"
+        ],
+        [
+          "0.4 percentage points",
+          "0.4"
+        ],
+        [
+          "0.3 percentage points",
+          "0.3"
+        ]
+      ],
+      "expected_pages": [
+        22,
+        23
+      ],
+      "evidence_groups": [
+        [
+          22
+        ],
+        [
+          23
+        ]
+      ]
     },
     {
-      "id": "cp-001",
+      "id": "mh-004",
+      "category": "multi_hop",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "Which two advanced-economy central banks cut policy rates in September 2025, and what 2026 GDP growth does the OECD project for those two economies?",
+      "expected_answer_contains": [
+        [
+          "United States",
+          "US",
+          "U.S."
+        ],
+        [
+          "Canada"
+        ],
+        [
+          "1.5"
+        ],
+        [
+          "1.2"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        17,
+        20
+      ],
+      "evidence_groups": [
+        [
+          20
+        ],
+        [
+          17,
+          7
+        ]
+      ]
+    },
+    {
+      "id": "mh-005",
+      "category": "multi_hop",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "Which of the three Ragas quality dimensions did the authors find hardest to evaluate, and how is its score computed?",
+      "expected_answer_contains": [
+        [
+          "context relevance"
+        ],
+        [
+          "extracted sentences"
+        ]
+      ],
+      "expected_pages": [
+        4,
+        5
+      ],
+      "evidence_groups": [
+        [
+          5
+        ],
+        [
+          4
+        ]
+      ]
+    },
+    {
+      "id": "mh-006",
+      "category": "multi_hop",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "How were the lower-relevance answers in WikiEval generated, and what agreement with humans did Ragas reach on answer relevance?",
+      "expected_answer_contains": [
+        [
+          "incomplete"
+        ],
+        [
+          "0.78"
+        ]
+      ],
+      "expected_pages": [
+        4,
+        5
+      ],
+      "evidence_groups": [
+        [
+          4
+        ],
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "id": "mh-007",
+      "category": "multi_hop",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "Which model generated the WikiEval questions, and which model was used to evaluate the Ragas prompts?",
+      "expected_answer_contains": [
+        [
+          "ChatGPT"
+        ],
+        [
+          "gpt-3.5-turbo-16k"
+        ]
+      ],
+      "expected_pages": [
+        3,
+        4
+      ],
+      "evidence_groups": [
+        [
+          4
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    {
+      "id": "mh-008",
+      "category": "multi_hop",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "Which cross-encoder model does BEIR use for re-ranking, and what is BM25+CE's CPU latency on 1 million DBPedia documents?",
+      "expected_answer_contains": [
+        [
+          "MiniLM"
+        ],
+        [
+          "6100ms",
+          "6100 ms",
+          "6,100 ms",
+          "6,100ms",
+          "6.1 s",
+          "6.1 seconds"
+        ]
+      ],
+      "expected_pages": [
+        6,
+        8
+      ],
+      "evidence_groups": [
+        [
+          6
+        ],
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "id": "mh-009",
+      "category": "multi_hop",
+      "doc_id": "beir_2021",
+      "difficulty": "hard",
+      "question": "What nDCG@10 and what Recall@100 does BM25 achieve on Natural Questions (NQ) in BEIR?",
+      "expected_answer_contains": [
+        [
+          "0.329"
+        ],
+        [
+          "0.760",
+          "0.76"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        24
+      ],
+      "evidence_groups": [
+        [
+          7
+        ],
+        [
+          24
+        ]
+      ]
+    },
+    {
+      "id": "mh-010",
+      "category": "multi_hop",
+      "doc_id": "beir_2021",
+      "difficulty": "hard",
+      "question": "On which two datasets does BM25+CE fail to outperform BM25, and under which licence are those datasets provided?",
+      "expected_answer_contains": [
+        [
+          "ArguAna"
+        ],
+        [
+          "Touché-2020",
+          "Touche-2020",
+          "Touché",
+          "Touche"
+        ],
+        [
+          "CC BY 4.0",
+          "CC-BY 4.0",
+          "CC BY-4.0"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        20
+      ],
+      "evidence_groups": [
+        [
+          7
+        ],
+        [
+          20
+        ]
+      ]
+    },
+    {
+      "id": "cmp-001",
       "category": "comparison",
-      "question": "How does the AI platform revenue compare to the cloud services revenue?",
-      "expected_answer_contains": ["AI", "cloud", "revenue"],
-      "expected_pages": [1],
-      "difficulty": "medium"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "easy",
+      "question": "Which is projected to grow faster in 2026, the United States or the euro area, and at what rates?",
+      "expected_answer_contains": [
+        [
+          "United States",
+          "US",
+          "U.S."
+        ],
+        [
+          "1.5"
+        ],
+        [
+          "1.0"
+        ]
+      ],
+      "expected_pages": [
+        6,
+        7,
+        17
+      ],
+      "evidence_groups": [
+        [
+          6,
+          17,
+          7
+        ]
+      ]
     },
     {
-      "id": "cp-002",
+      "id": "cmp-002",
       "category": "comparison",
-      "question": "What are the main differences between Q3 and Q4 performance?",
-      "expected_answer_contains": ["Q3", "Q4"],
-      "expected_pages": [1],
-      "difficulty": "hard"
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "How does the OECD's GDP growth projection for Japan in 2026 compare with 2025?",
+      "expected_answer_contains": [
+        [
+          "1.1"
+        ],
+        [
+          "0.5"
+        ]
+      ],
+      "expected_pages": [
+        7,
+        17
+      ],
+      "evidence_groups": [
+        [
+          17,
+          7
+        ]
+      ]
     },
     {
-      "id": "ua-001",
-      "category": "unanswerable",
-      "question": "What is TechVision's market share in the global AI market?",
-      "expected_answer_contains": ["not", "information", "available"],
-      "expected_pages": [],
-      "difficulty": "medium"
+      "id": "cmp-003",
+      "category": "comparison",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "Compare the OECD's 2026 headline inflation projections for the United States and the euro area.",
+      "expected_answer_contains": [
+        [
+          "3.0"
+        ],
+        [
+          "1.9"
+        ]
+      ],
+      "expected_pages": [
+        8
+      ],
+      "evidence_groups": [
+        [
+          8
+        ]
+      ]
     },
     {
-      "id": "ua-002",
-      "category": "unanswerable",
-      "question": "Who are TechVision's main competitors?",
-      "expected_answer_contains": ["not", "mentioned", "information"],
-      "expected_pages": [],
-      "difficulty": "medium"
+      "id": "cmp-004",
+      "category": "comparison",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "hard",
+      "question": "How does the projected decline in potential output growth to 2050 compare between G20 advanced and G20 emerging-market economies?",
+      "expected_answer_contains": [
+        [
+          "4¼",
+          "4.25",
+          "4 1/4",
+          "4 and a quarter"
+        ],
+        [
+          "1½",
+          "1.5",
+          "1 1/2",
+          "1 and a half"
+        ],
+        [
+          "1¼",
+          "1.25",
+          "1 1/4",
+          "1 and a quarter"
+        ]
+      ],
+      "expected_pages": [
+        22
+      ],
+      "evidence_groups": [
+        [
+          22
+        ]
+      ]
     },
     {
-      "id": "ua-003",
+      "id": "cmp-005",
+      "category": "comparison",
+      "doc_id": "ragas_2023",
+      "difficulty": "easy",
+      "question": "How does Ragas compare with the GPT Score baseline on context relevance agreement with human annotators?",
+      "expected_answer_contains": [
+        [
+          "0.70",
+          "0.7"
+        ],
+        [
+          "0.63"
+        ]
+      ],
+      "expected_pages": [
+        5
+      ],
+      "evidence_groups": [
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "id": "cmp-006",
+      "category": "comparison",
+      "doc_id": "ragas_2023",
+      "difficulty": "easy",
+      "question": "Compare the WikiEval annotator agreement rates for faithfulness and for answer relevance.",
+      "expected_answer_contains": [
+        [
+          "95%",
+          "95 %",
+          "95 percent"
+        ],
+        [
+          "90%",
+          "90 %",
+          "90 percent"
+        ]
+      ],
+      "expected_pages": [
+        4
+      ],
+      "evidence_groups": [
+        [
+          4
+        ]
+      ]
+    },
+    {
+      "id": "cmp-007",
+      "category": "comparison",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "How do the GPT Score and GPT Ranking baselines differ in how they judge answers?",
+      "expected_answer_contains": [
+        [
+          "0 and 10",
+          "0-10",
+          "0 to 10"
+        ],
+        [
+          "preferred",
+          "select",
+          "selects"
+        ]
+      ],
+      "expected_pages": [
+        5
+      ],
+      "evidence_groups": [
+        [
+          5
+        ]
+      ]
+    },
+    {
+      "id": "cmp-008",
+      "category": "comparison",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "Compare the index sizes of ColBERT and BM25 for 1 million DBPedia documents.",
+      "expected_answer_contains": [
+        [
+          "20GB",
+          "20 GB"
+        ],
+        [
+          "0.4GB",
+          "0.4 GB"
+        ]
+      ],
+      "expected_pages": [
+        8
+      ],
+      "evidence_groups": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "id": "cmp-009",
+      "category": "comparison",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "Compare the Hole@10 rates of TAS-B and docT5query on TREC-COVID.",
+      "expected_answer_contains": [
+        [
+          "31.8%",
+          "31.8 %"
+        ],
+        [
+          "2.8%",
+          "2.8 %"
+        ]
+      ],
+      "expected_pages": [
+        9
+      ],
+      "evidence_groups": [
+        [
+          9
+        ]
+      ]
+    },
+    {
+      "id": "cmp-010",
+      "category": "comparison",
+      "doc_id": "beir_2021",
+      "difficulty": "hard",
+      "question": "Based on average performance relative to BM25, which generalises better in BEIR: SPARTA or docT5query?",
+      "expected_answer_contains": [
+        [
+          "docT5query"
+        ],
+        [
+          "1.6%",
+          "1.6 %"
+        ],
+        [
+          "20.3%",
+          "20.3 %"
+        ]
+      ],
+      "expected_pages": [
+        7
+      ],
+      "evidence_groups": [
+        [
+          7
+        ]
+      ]
+    },
+    {
+      "id": "un-001",
       "category": "unanswerable",
-      "question": "What is the customer churn rate?",
-      "expected_answer_contains": ["not", "available", "information"],
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What GDP growth does the OECD project for the euro area in 2027?",
+      "expected_answer_contains": [],
       "expected_pages": [],
-      "difficulty": "hard"
+      "evidence_groups": [],
+      "absent_terms": [
+        "2027"
+      ]
+    },
+    {
+      "id": "un-002",
+      "category": "unanswerable",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What GDP growth does the OECD project for Nigeria in 2025?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "nigeria",
+        "nigerian"
+      ]
+    },
+    {
+      "id": "un-003",
+      "category": "unanswerable",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What policy interest rate did the Bank of England set in September 2025?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "bank of england"
+      ]
+    },
+    {
+      "id": "un-004",
+      "category": "unanswerable",
+      "doc_id": "oecd_interim_2025_09",
+      "difficulty": "medium",
+      "question": "What Brent crude oil price does the OECD assume for 2026?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "brent"
+      ]
+    },
+    {
+      "id": "un-005",
+      "category": "unanswerable",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "When was the Ragas Python package first published on PyPI?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "pypi"
+      ]
+    },
+    {
+      "id": "un-006",
+      "category": "unanswerable",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "What ROUGE-L score did Ragas achieve on WikiEval?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "rouge",
+        "rouge-l"
+      ]
+    },
+    {
+      "id": "un-007",
+      "category": "unanswerable",
+      "doc_id": "ragas_2023",
+      "difficulty": "medium",
+      "question": "What faithfulness accuracy did Ragas obtain when Llama 2 was used as the judge model?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "llama 2",
+        "llama-2",
+        "llama2"
+      ]
+    },
+    {
+      "id": "un-008",
+      "category": "unanswerable",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "What nDCG@10 does BEIR report for the Contriever model?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "contriever"
+      ]
+    },
+    {
+      "id": "un-009",
+      "category": "unanswerable",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "What average nDCG@10 does SPLADE achieve on BEIR?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "splade"
+      ]
+    },
+    {
+      "id": "un-010",
+      "category": "unanswerable",
+      "doc_id": "beir_2021",
+      "difficulty": "medium",
+      "question": "What Cohen's kappa did the BEIR authors report for their TREC-COVID re-annotation?",
+      "expected_answer_contains": [],
+      "expected_pages": [],
+      "evidence_groups": [],
+      "absent_terms": [
+        "kappa"
+      ]
     }
   ]
 }

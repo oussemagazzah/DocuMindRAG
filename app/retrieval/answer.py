@@ -51,9 +51,12 @@ def extract_citations(answer: str, results: list[SearchResult]) -> list[dict]:
     return citations
 
 
+def build_user_message(query: str, results: list[SearchResult]) -> str:
+    return f"Context:\n{_format_context(results)}\n\nQuestion: {query}"
+
+
 def generate_answer(query: str, results: list[SearchResult]) -> tuple[str, str]:
-    context = _format_context(results)
-    user_message = f"Context:\n{context}\n\nQuestion: {query}"
+    user_message = build_user_message(query, results)
 
     if settings.gemini_api_key:
         try:
@@ -71,22 +74,26 @@ def generate_answer(query: str, results: list[SearchResult]) -> tuple[str, str]:
         return answer, settings.ollama_model
     except Exception as e:
         logger.error(f"Ollama also failed: {type(e).__name__}: {e}")
-        raise LLMError()
+        raise LLMError() from e
 
 
-def _generate_with_gemini(user_message: str) -> str:
+def gemini_response(user_message: str):
+    """Raw Gemini response (the evaluation also reads finish_reason and token usage)."""
     model = genai.GenerativeModel(
         model_name=settings.gemini_model,
         system_instruction=SYSTEM_PROMPT,
     )
-    response = model.generate_content(
+    return model.generate_content(
         user_message,
         generation_config=genai.GenerationConfig(
-            temperature=0.1,
-            max_output_tokens=1024,
+            temperature=settings.gemini_temperature,
+            max_output_tokens=settings.gemini_max_output_tokens,
         ),
     )
-    return response.text
+
+
+def _generate_with_gemini(user_message: str) -> str:
+    return gemini_response(user_message).text
 
 
 def _generate_with_ollama(user_message: str) -> str:

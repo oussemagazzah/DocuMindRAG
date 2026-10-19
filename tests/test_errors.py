@@ -1,17 +1,16 @@
 """Tests for error handling module."""
 
-import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.errors import (
-    DocuMindError,
     DocumentNotFoundError,
-    IngestionError,
-    QueryError,
-    LLMError,
-    VectorStoreError,
+    DocuMindError,
     ErrorResponse,
+    IngestionError,
+    LLMError,
+    QueryError,
+    VectorStoreError,
 )
 
 

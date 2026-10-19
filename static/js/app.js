@@ -104,6 +104,11 @@ async function checkHealth() {
     try {
         const res = await fetch(`${API_BASE}/health`);
         const data = await res.json();
+        document.body.classList.toggle('demo', Boolean(data.demo_mode));
+        if (data.demo_mode && data.llm_calls_left_today !== null) {
+            document.getElementById('llmLeft').textContent =
+                `LLM answers left today: ${data.llm_calls_left_today} (after that, retrieved passages only).`;
+        }
         if (data.status === 'ok' && data.qdrant === 'connected') {
             statusIndicator.innerHTML = '<span class="status-dot"></span><span>Connected</span>';
         } else {
@@ -232,6 +237,7 @@ async function runQuery() {
     } finally {
         loadingState.style.display = 'none';
         queryBtn.disabled = false;
+        checkHealth();
     }
 }
 
@@ -242,7 +248,7 @@ function displayAnswer(data) {
         citationsList.innerHTML = data.citations.map(c => `
             <div class="citation-item">
                 <div class="citation-top">
-                    <span class="citation-page">p.${c.page_number}</span>
+                    <span class="citation-page">${c.doc_name ? escapeHtml(c.doc_name) + ' ' : ''}p.${c.page_number}</span>
                     <span class="citation-score">${c.retrieval_score.toFixed(3)}</span>
                     <button class="citation-view-btn" onclick="openCitationViewer('${escapeHtml(c.doc_id)}', ${c.page_number}, '${escapeHtml(c.chunk_text.substring(0, 200).replace(/'/g, "\\'"))}')">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>

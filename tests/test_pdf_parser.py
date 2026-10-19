@@ -1,7 +1,6 @@
 """Tests for PDF parser module."""
 
-import pytest
-from app.ingestion.pdf_parser import extract_pages, get_pdf_metadata, PageContent
+from app.ingestion.pdf_parser import PageContent, extract_pages, get_pdf_metadata
 
 
 def _make_simple_pdf() -> bytes:
@@ -64,9 +63,32 @@ def test_extract_pages_empty_pdf():
 
     doc = fitz.open()
     doc.new_page()
-    page = doc[0]
     pdf_bytes = doc.tobytes()
     doc.close()
     pages = extract_pages(pdf_bytes)
     assert len(pages) >= 1
     assert all(p.text.strip() == "" for p in pages)
+
+
+
+def test_hyphenated_line_breaks_are_joined():
+    import fitz
+
+    from app.ingestion.pdf_parser import extract_pages
+
+    doc = fitz.open()
+    page = doc.new_page()
+    page.insert_text((72, 72), "a retrieval sys-")
+    page.insert_text((72, 86), "tem for documents")
+    assert "system" in extract_pages(doc.tobytes())[0].text
+
+
+def test_ligatures_expanded_on_real_pdf():
+    from pathlib import Path
+
+    from app.ingestion.pdf_parser import extract_pages
+
+    pdf = Path(__file__).parent.parent / "evaluation" / "corpus" / "beir_2021.pdf"
+    pages = extract_pages(pdf.read_bytes())
+    assert not any("ﬁ" in p.text or "ﬂ" in p.text for p in pages)
+    assert "efficient" in pages[0].text

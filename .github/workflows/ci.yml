@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      # Pinned: newer ruff releases enable more rules by default (ruff.toml also pins the rule set).
+      - run: pip install ruff==0.16.5
+      - run: ruff check . --output-format=github
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # Tests mock the LLM and use in-memory Qdrant; make sure nothing reaches Hugging Face or Gemini.
+      HF_HUB_OFFLINE: "1"
+      GEMINI_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies (CPU-only torch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+      - name: Verify benchmark against the corpus PDFs
+        run: python -m evaluation.check_benchmark
+      - name: Run tests
+        run: python -m pytest -q --tb=short

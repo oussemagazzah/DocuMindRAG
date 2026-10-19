@@ -27,7 +27,13 @@
             </div>
 
             <div class="sidebar-content">
-                <div class="section">
+                <div class="section demo-notice" id="demoNotice">
+                    <h3 class="section-title">Public demo</h3>
+                    <p class="upload-hint">Read-only, with three preloaded public PDFs (BEIR, Ragas, OECD Interim
+                        Economic Outlook Sept 2025). <span id="llmLeft"></span></p>
+                </div>
+
+                <div class="section upload-section">
                     <h3 class="section-title">Upload Document</h3>
                     <div class="upload-zone" id="uploadZone">
                         <input type="file" id="fileInput" accept=".pdf" hidden>
@@ -85,7 +91,7 @@
             <div class="query-section">
                 <div class="input-group">
                     <label for="queryInput" class="sr-only">Ask a question</label>
-                    <textarea id="queryInput" placeholder="What was the revenue in 2025?" rows="2"></textarea>
+                    <textarea id="queryInput" placeholder="e.g. What global GDP growth does the OECD project for 2026?" rows="2"></textarea>
                     <button class="btn-primary" id="queryBtn" aria-label="Submit query">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         Ask
@@ -93,11 +99,11 @@
                 </div>
                 <div class="examples">
                     <span class="examples-label">Try:</span>
-                    <button class="example-chip" data-query="What was the total revenue in 2025?">Revenue 2025</button>
-                    <button class="example-chip" data-query="Who is the CEO?">CEO</button>
-                    <button class="example-chip" data-query="What products does TechVision offer?">Products</button>
-                    <button class="example-chip" data-query="What are the 2026 guidance numbers?">2026 Guidance</button>
-                    <button class="example-chip" data-query="Which strategic partnerships were mentioned?">Partnerships</button>
+                    <button class="example-chip" data-query="What global GDP growth does the OECD project for 2026?">OECD 2026 growth</button>
+                    <button class="example-chip" data-query="What is the estimated effective US tariff rate?">US tariff rate</button>
+                    <button class="example-chip" data-query="How does Ragas measure faithfulness?">Ragas faithfulness</button>
+                    <button class="example-chip" data-query="How does BM25 compare with dense retrievers in BEIR?">BM25 vs dense</button>
+                    <button class="example-chip" data-query="How slow is BM25+CE re-ranking on CPU?">Reranker latency</button>
                 </div>
             </div>
 
@@ -140,7 +146,7 @@
             <div class="empty-query" id="emptyState">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 <h3>Ready to answer</h3>
-                <p>Upload a PDF and ask a question to get started.</p>
+                <p>Ask about the documents in the sidebar, or upload your own PDF.</p>
             </div>
         </main>
     </div>

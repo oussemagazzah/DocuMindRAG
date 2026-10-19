@@ -65,9 +65,20 @@ def compute_groundedness(
     )
 
 
+_CITATION_RE = re.compile(r"\[\s*p\.?\s*\d+(?:\s*[,;]\s*(?:p\.?\s*)?\d+)*\s*\]", re.IGNORECASE)
+
+
+def extract_cited_pages(answer: str) -> list[int]:
+    """Page numbers from citations like [p.3], [p.3, p.5] or [p.3, 5], in order of appearance."""
+    pages: list[int] = []
+    for match in _CITATION_RE.finditer(answer):
+        pages.extend(int(n) for n in re.findall(r"\d+", match.group(0)))
+    return pages
+
+
 def _check_citation_precision(answer: str, results: list[SearchResult]) -> float:
     """Check what fraction of cited page numbers are valid."""
-    cited_pages = set(re.findall(r"\[p\.(\d+)\]", answer))
+    cited_pages = {str(p) for p in extract_cited_pages(answer)}
     if not cited_pages:
         return 0.5
 

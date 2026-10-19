@@ -1,7 +1,7 @@
 """Tests for chunker module."""
 
+from app.ingestion.chunker import Chunk, _estimate_tokens, chunk_pages
 from app.ingestion.pdf_parser import PageContent
-from app.ingestion.chunker import chunk_pages, Chunk, _estimate_tokens
 
 
 def test_estimate_tokens():
@@ -70,3 +70,22 @@ def test_chunk_pages_small_text_single_chunk():
     chunks = chunk_pages(pages)
     assert len(chunks) == 1
     assert chunks[0].text == "Short text"
+
+
+def test_merged_short_pages_keep_their_own_page_number():
+    # Page 1 is short, so it is buffered together with page 2; chunks made
+    # mostly of page 2's text must be labelled page 2, not page 1.
+    pages = [
+        PageContent(page_number=1, text="A" * 300, char_count=300),
+        PageContent(page_number=2, text="B" * 6000, char_count=6000),
+    ]
+    chunks = chunk_pages(pages)
+    assert {c.page_number for c in chunks} == {2}
+    for c in chunks:
+        assert c.text.count("B") >= c.text.count("A")
+
+
+def test_every_page_with_text_is_labelled():
+    pages = [PageContent(page_number=i, text=chr(64 + i) * 1500, char_count=1500) for i in range(1, 7)]
+    chunks = chunk_pages(pages)
+    assert {c.page_number for c in chunks} == set(range(1, 7))

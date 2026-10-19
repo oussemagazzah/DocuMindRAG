@@ -1,10 +1,8 @@
 """Tests for feedback, analytics, eval, and query log functionality."""
 
-import json
-import pytest
-from unittest.mock import patch, MagicMock, AsyncMock
-from datetime import datetime, timezone
+from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
 
 # ── DB Functions ──────────────────────────────────────────────
 
@@ -17,6 +15,7 @@ async def test_log_query_sqlite():
         mock_settings.database_path = ":memory:"
 
         import aiosqlite
+
         from app.db import SCHEMA_SQLITE, log_query
 
         async with aiosqlite.connect(":memory:") as db:

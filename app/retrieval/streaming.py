@@ -7,10 +7,9 @@ import google.generativeai as genai
 import ollama as ollama_client
 
 from app.config import get_settings
-from app.errors import LLMError
 from app.logging_config import get_logger
+from app.retrieval.answer import SYSTEM_PROMPT, _format_context
 from app.retrieval.search import SearchResult
-from app.retrieval.answer import _format_context, SYSTEM_PROMPT
 
 settings = get_settings()
 logger = get_logger("streaming")
@@ -60,8 +59,8 @@ async def _stream_gemini(user_message: str) -> AsyncGenerator[str, None]:
     response = model.generate_content(
         user_message,
         generation_config=genai.GenerationConfig(
-            temperature=0.1,
-            max_output_tokens=1024,
+            temperature=settings.gemini_temperature,
+            max_output_tokens=settings.gemini_max_output_tokens,
         ),
         stream=True,
     )

@@ -5,6 +5,7 @@ import sys
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
+
 from alembic import context
 
 config = context.config
@@ -15,6 +16,7 @@ if config.config_file_name is not None:
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app.config import get_settings
+
 settings = get_settings()
 
 if settings.database_url:

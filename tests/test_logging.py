@@ -1,9 +1,9 @@
 """Tests for logging configuration."""
 
-import logging
 import json
+import logging
 
-from app.logging_config import setup_logging, get_logger, JSONFormatter, ReadableFormatter, REQUEST_ID
+from app.logging_config import REQUEST_ID, JSONFormatter, ReadableFormatter, get_logger, setup_logging
 
 
 def test_setup_logging_creates_handler():
