@@ -1,205 +1,196 @@
-"""RAG evaluation pipeline for DocuMindRAG.
+"""Regenerate the committed evaluation results.
 
-Runs benchmark questions and computes:
-- Citation precision: % of cited pages that are valid
-- Answer relevance: keyword overlap with expected answer
-- Groundedness: from the groundedness scoring module
-- Latency: end-to-end query time
+    python -m evaluation.run_eval --all          # retrieval ablation + end-to-end
+    python -m evaluation.run_eval --retrieval    # retrieval ablation only (no LLM, deterministic)
+
+Writes evaluation/results/results.json and evaluation/results/ablation.md.
+Sections not re-run are kept from the existing results.json.
 """
 
-import json
-import time
-import asyncio
-from pathlib import Path
-from dataclasses import dataclass, asdict
+import os
 
-from app.config import get_settings
-from app.logging_config import get_logger, setup_logging
+# Must be set before any app module reads settings: the evaluation always runs
+# against a fresh in-process Qdrant, never a server with user documents in it.
+os.environ["QDRANT_LOCATION"] = ":memory:"
+os.environ["COLLECTION_NAME"] = "documind_eval"
 
-settings = get_settings()
-logger = get_logger("evaluation")
+import argparse  # noqa: E402
+import json  # noqa: E402
+import platform  # noqa: E402
+import random  # noqa: E402
+import subprocess  # noqa: E402
+import sys  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
 
+import numpy as np  # noqa: E402
 
-@dataclass
-class EvalResult:
-    question_id: str
-    category: str
-    question: str
-    answer: str
-    expected_contains: list[str]
-    cited_pages: list[int]
-    expected_pages: list[int]
-    citation_precision: float
-    answer_relevance: float
-    groundedness_score: float
-    groundedness_verdict: str
-    latency_ms: float
-    model_used: str
-    passed: bool
+from evaluation.check_benchmark import ROOT, check, load_benchmark  # noqa: E402
+
+RESULTS_DIR = ROOT / "evaluation" / "results"
+SEED = 0
 
 
-def _compute_citation_precision(cited_pages: list[int], expected_pages: list[int]) -> float:
-    if not expected_pages:
-        return 1.0 if not cited_pages else 0.0
-    if not cited_pages:
-        return 0.0
-    valid = sum(1 for p in cited_pages if p in expected_pages)
-    return valid / len(cited_pages)
+def _seed_everything():
+    import torch
+
+    random.seed(SEED)
+    np.random.seed(SEED)
+    torch.manual_seed(SEED)
 
 
-def _compute_answer_relevance(answer: str, expected_terms: list[str]) -> float:
-    if not expected_terms:
-        return 0.5
-    answer_lower = answer.lower()
-    matches = sum(1 for term in expected_terms if term.lower() in answer_lower)
-    return matches / len(expected_terms)
-
-
-def _extract_cited_pages(answer: str) -> list[int]:
-    import re
-    return [int(m) for m in re.findall(r"\[p\.(\d+)\]", answer)]
-
-
-async def run_evaluation(
-    questions_file: str = "evaluation/benchmark.json",
-    max_questions: int | None = None,
-) -> list[EvalResult]:
-    """Run the evaluation benchmark."""
-    from app.services.document_service import query_documents
-    from app.models import QueryRequest
-
-    with open(questions_file) as f:
-        benchmark = json.load(f)
-
-    questions = benchmark["questions"]
-    if max_questions:
-        questions = questions[:max_questions]
-
-    results = []
-    total = len(questions)
-
-    for i, q in enumerate(questions):
-        logger.info(f"[{i+1}/{total}] Evaluating: {q['id']} - {q['question'][:60]}...")
-
-        start = time.time()
+def _cpu_name() -> str:
+    if sys.platform == "win32":
         try:
-            response = await query_documents(QueryRequest(query=q["question"], top_k=5))
-            elapsed_ms = (time.time() - start) * 1000
+            import winreg
 
-            cited_pages = _extract_cited_pages(response.answer)
-            citation_prec = _compute_citation_precision(cited_pages, q.get("expected_pages", []))
-            relevance = _compute_answer_relevance(response.answer, q.get("expected_answer_contains", []))
-
-            passed = (
-                citation_prec >= 0.5
-                and relevance >= 0.3
-                and response.groundedness.score >= 0.3
-            )
-
-            result = EvalResult(
-                question_id=q["id"],
-                category=q["category"],
-                question=q["question"],
-                answer=response.answer,
-                expected_contains=q.get("expected_answer_contains", []),
-                cited_pages=cited_pages,
-                expected_pages=q.get("expected_pages", []),
-                citation_precision=round(citation_prec, 3),
-                answer_relevance=round(relevance, 3),
-                groundedness_score=response.groundedness.score,
-                groundedness_verdict=response.groundedness.verdict,
-                latency_ms=round(elapsed_ms, 2),
-                model_used=response.model_used,
-                passed=passed,
-            )
-        except Exception as e:
-            logger.error(f"Question {q['id']} failed: {e}")
-            result = EvalResult(
-                question_id=q["id"],
-                category=q["category"],
-                question=q["question"],
-                answer=f"ERROR: {e}",
-                expected_contains=q.get("expected_answer_contains", []),
-                cited_pages=[],
-                expected_pages=q.get("expected_pages", []),
-                citation_precision=0.0,
-                answer_relevance=0.0,
-                groundedness_score=0.0,
-                groundedness_verdict="error",
-                latency_ms=0.0,
-                model_used="none",
-                passed=False,
-            )
-
-        results.append(result)
-        logger.info(
-            f"  -> passed={result.passed}, citation={result.citation_precision:.2f}, "
-            f"relevance={result.answer_relevance:.2f}, groundedness={result.groundedness_score:.2f}"
-        )
-
-    return results
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"HARDWARE\DESCRIPTION\System\CentralProcessor\0")
+            return winreg.QueryValueEx(key, "ProcessorNameString")[0].strip()
+        except OSError:
+            pass
+    try:
+        for line in Path("/proc/cpuinfo").read_text().splitlines():
+            if line.startswith("model name"):
+                return line.split(":", 1)[1].strip()
+    except OSError:
+        pass
+    return platform.processor() or "unknown"
 
 
-def generate_report(results: list[EvalResult]) -> dict:
-    """Generate evaluation report with aggregate metrics."""
-    total = len(results)
-    passed = sum(1 for r in results if r.passed)
+def _ram_gb() -> float | str:
+    try:
+        if sys.platform == "win32":
+            import ctypes
 
-    avg_citation = sum(r.citation_precision for r in results) / total if total else 0
-    avg_relevance = sum(r.answer_relevance for r in results) / total if total else 0
-    avg_groundedness = sum(r.groundedness_score for r in results) / total if total else 0
-    avg_latency = sum(r.latency_ms for r in results) / total if total else 0
+            class MemoryStatus(ctypes.Structure):
+                _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong),
+                            ("ullTotalPhys", ctypes.c_ulonglong), ("ullAvailPhys", ctypes.c_ulonglong),
+                            ("ullTotalPageFile", ctypes.c_ulonglong), ("ullAvailPageFile", ctypes.c_ulonglong),
+                            ("ullTotalVirtual", ctypes.c_ulonglong), ("ullAvailVirtual", ctypes.c_ulonglong),
+                            ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
 
-    by_category = {}
-    for r in results:
-        cat = r.category
-        if cat not in by_category:
-            by_category[cat] = {"total": 0, "passed": 0, "avg_latency": 0, "count": 0}
-        by_category[cat]["total"] += 1
-        if r.passed:
-            by_category[cat]["passed"] += 1
-        by_category[cat]["avg_latency"] += r.latency_ms
-        by_category[cat]["count"] += 1
+            status = MemoryStatus()
+            status.dwLength = ctypes.sizeof(MemoryStatus)
+            ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status))
+            return round(status.ullTotalPhys / 1024**3, 1)
+        return round(os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES") / 1024**3, 1)
+    except (OSError, ValueError, AttributeError):
+        return "unknown"
 
-    for cat in by_category:
-        c = by_category[cat]
-        c["pass_rate"] = round(c["passed"] / c["total"], 3) if c["total"] else 0
-        c["avg_latency"] = round(c["avg_latency"] / c["count"], 2) if c["count"] else 0
-        del c["count"]
 
-    report = {
-        "summary": {
-            "total_questions": total,
-            "passed": passed,
-            "pass_rate": round(passed / total, 3) if total else 0,
-            "avg_citation_precision": round(avg_citation, 3),
-            "avg_answer_relevance": round(avg_relevance, 3),
-            "avg_groundedness": round(avg_groundedness, 3),
-            "avg_latency_ms": round(avg_latency, 2),
-        },
-        "by_category": by_category,
-        "results": [asdict(r) for r in results],
+def _hf_revision(repo_id: str) -> str:
+    """Commit hash of the locally cached Hugging Face model snapshot."""
+    from huggingface_hub.constants import HF_HUB_CACHE
+
+    ref = Path(HF_HUB_CACHE) / f"models--{repo_id.replace('/', '--')}" / "refs" / "main"
+    return ref.read_text().strip() if ref.exists() else "unknown"
+
+
+def _git_commit() -> str:
+    try:
+        out = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True)
+        dirty = subprocess.run(["git", "status", "--porcelain", "--", "app", "evaluation", ":!evaluation/results"], cwd=ROOT,
+                               capture_output=True, text=True).stdout.strip()
+        return out.stdout.strip() + ("-dirty" if dirty else "")
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
+
+
+def environment(benchmark: dict, index_stats: dict, repeats: int) -> dict:
+    from importlib.metadata import version
+
+    import qdrant_client
+    import sentence_transformers
+    import torch
+
+    from app.config import get_settings
+    from app.ingestion.embedder import get_embedding_model
+
+    s = get_settings()
+    embedding_repo = s.embedding_model if "/" in s.embedding_model else f"sentence-transformers/{s.embedding_model}"
+    questions = benchmark["questions"]
+    return {
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "git_commit": _git_commit(),
+        "seed": SEED,
+        "embedding_model": embedding_repo,
+        "embedding_revision": _hf_revision(embedding_repo),
+        "reranker_model": s.reranker_model,
+        "reranker_revision": _hf_revision(s.reranker_model),
+        "chunk_size_tokens": s.chunk_size_tokens,
+        "chunk_overlap_tokens": s.chunk_overlap_tokens,
+        "dense_top_k": s.dense_top_k,
+        "sparse_top_k": s.sparse_top_k,
+        "rrf_k": s.rrf_k,
+        "rerank_top_k": s.rerank_top_k,
+        "bm25_k1": s.bm25_k1,
+        "bm25_b": s.bm25_b,
+        "bm25_avg_doc_len": s.bm25_avg_doc_len,
+        "index": index_stats,
+        "corpus_pages": sum(d["pages"] for d in index_stats.values()),
+        "corpus_chunks": sum(d["chunks"] for d in index_stats.values()),
+        "total_questions": len(questions),
+        "answerable_questions": sum(1 for q in questions if q["category"] != "unanswerable"),
+        "latency_repeats": repeats,
+        "cpu": _cpu_name(),
+        "cpu_count": os.cpu_count(),
+        "ram_gb": _ram_gb(),
+        "device": str(get_embedding_model().device),
+        "torch": torch.__version__,
+        "torch_threads": torch.get_num_threads(),
+        "sentence_transformers": sentence_transformers.__version__,
+        "qdrant_client": version("qdrant-client") if qdrant_client else "unknown",
+        "python": platform.python_version(),
+        "os": f"{platform.system()} {platform.release()}",
     }
 
-    return report
 
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--all", action="store_true", help="run retrieval ablation and end-to-end evaluation")
+    parser.add_argument("--retrieval", action="store_true", help="run the retrieval ablation")
+    parser.add_argument("--e2e", action="store_true", help="run the end-to-end answer evaluation (needs GEMINI_API_KEY)")
+    parser.add_argument("--repeats", type=int, default=3, help="latency passes over all questions")
+    args = parser.parse_args(argv)
+    if not (args.all or args.retrieval or args.e2e):
+        parser.error("choose --all, --retrieval or --e2e")
 
-async def main():
-    setup_logging(level="INFO")
-    logger.info("Starting evaluation run")
+    benchmark = load_benchmark()
+    errors = check(benchmark)
+    if errors:
+        print("Benchmark check failed:\n  " + "\n  ".join(errors))
+        return 1
 
-    results = await run_evaluation()
-    report = generate_report(results)
+    _seed_everything()
+    from evaluation.retrieval_eval import ablation_markdown, build_index, run_ablation
 
-    output_path = Path("evaluation/report.json")
-    with open(output_path, "w") as f:
-        json.dump(report, f, indent=2)
+    print("Indexing corpus...", flush=True)
+    index_stats = build_index(benchmark)
+    env = environment(benchmark, index_stats, args.repeats)
 
-    logger.info(f"Evaluation complete. Report saved to {output_path}")
-    logger.info(f"Summary: {json.dumps(report['summary'], indent=2)}")
+    results_path = RESULTS_DIR / "results.json"
+    results = json.loads(results_path.read_text(encoding="utf-8")) if results_path.exists() else {}
+    results["benchmark"] = {"version": benchmark["metadata"]["version"], "total_questions": len(benchmark["questions"])}
 
-    return report
+    if args.all or args.retrieval:
+        print("Running retrieval ablation...", flush=True)
+        results["retrieval"] = {"environment": env, "configs": run_ablation(benchmark, args.repeats)}
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        (RESULTS_DIR / "ablation.md").write_text(ablation_markdown(results["retrieval"]["configs"], env), encoding="utf-8")
+
+    if args.all or args.e2e:
+        from evaluation.e2e_eval import run_e2e
+
+        print("Running end-to-end evaluation...", flush=True)
+        results["end_to_end"] = run_e2e(benchmark, env)
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    results_path.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"Wrote {results_path.relative_to(ROOT)}")
+    if "retrieval" in results:
+        print((RESULTS_DIR / "ablation.md").read_text(encoding="utf-8"))
+    return 0
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    sys.exit(main())

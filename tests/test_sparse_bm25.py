@@ -18,7 +18,7 @@ settings = get_settings()
 
 
 def _weights(vec) -> dict[int, float]:
-    return dict(zip(vec.indices, vec.values))
+    return dict(zip(vec.indices, vec.values, strict=True))
 
 
 def test_sparse_indices_stable_across_processes():

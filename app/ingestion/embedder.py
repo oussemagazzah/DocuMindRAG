@@ -95,7 +95,8 @@ def upsert_chunks(doc_id: str, embedded_chunks: list[tuple[Chunk, list[float]]])
 
     points = []
     for chunk, embedding in embedded_chunks:
-        chunk_id = str(uuid.uuid4())
+        # Deterministic: same document + chunk always gets the same id (stable ties, idempotent re-upload).
+        chunk_id = str(uuid.uuid5(uuid.NAMESPACE_URL, f"documind:{doc_id}:{chunk.chunk_index}"))
         sparse = build_sparse_vector(chunk.text)
 
         points.append(
