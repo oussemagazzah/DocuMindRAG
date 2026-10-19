@@ -86,3 +86,21 @@ def test_preload_skips_indexed_and_reingests_when_vectors_missing(tmp_path):
     loaded, delete, ingest = asyncio.run(run(False, docs, []))
     assert delete.await_count == 1
     assert loaded == 2
+
+
+def test_query_documents_returns_passages_when_llm_unavailable():
+    from app.models import QueryRequest
+    from app.retrieval.search import SearchResult
+
+    hit = SearchResult(chunk_id="c1", doc_id="d1", page_number=6, chunk_index=0, text="Growth 2.9% in 2026",
+                       char_start=0, char_end=10, score=0.9, source="reranked")
+    with patch.object(document_service, "_run_retrieval", AsyncMock(return_value=[hit])), \
+         patch.object(document_service, "list_documents", AsyncMock(return_value=[{"id": "d1", "name": "oecd.pdf"}])), \
+         patch.object(document_service, "generate_answer", side_effect=LLMError()), \
+         patch.object(document_service, "llm_budget", DailyBudget(0)), \
+         patch.object(document_service.settings, "demo_mode", True):
+        resp = asyncio.run(document_service.query_documents(QueryRequest(query="growth?")))
+    assert resp.answer == document_service.RETRIEVAL_ONLY_NOTICE
+    assert resp.groundedness.verdict == "not_applicable"
+    assert resp.citations[0].doc_name == "oecd.pdf"
+    assert resp.citations[0].page_number == 6

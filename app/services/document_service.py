@@ -246,7 +246,7 @@ async def query_documents(request: QueryRequest) -> QueryResponse:
     elapsed_ms = (time.time() - start) * 1000
     logger.info(
         f"Query complete: {elapsed_ms:.0f}ms, model={model_used}, citations={len(citations)}, "
-        f"groundedness={groundedness.verdict} ({groundedness.score:.2f})"
+        f"groundedness={groundedness_model.verdict} ({groundedness_model.score:.2f})"
     )
 
     return QueryResponse(

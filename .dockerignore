@@ -19,3 +19,7 @@ sample_pdfs
 gradio_app.py
 create_sample_pdf.py
 README.md
+vemv
+.eval_cache
+.ruff_cache
+evaluation/results
